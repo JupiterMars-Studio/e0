@@ -1,6 +1,6 @@
 
 
-
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 //hero
 const heroGrid = document.getElementById("hero-grid");
@@ -260,4 +260,123 @@ document.querySelectorAll('.our-result').forEach(caseEl => {
 
   items.forEach(item => observer.observe(item));
 });
+
+
+//connect section
+
+
+const textWidth = document.querySelector(".connect_content").offsetWidth;
+const windowWidth = window.innerWidth;
+
+
+let split = SplitText.create(".connect_content-after", {
+  type: "chars",
+  charsClass: "letter"
+});
+
+split.chars.forEach((char) => {
+  const randomY = (Math.floor(7 * Math.random()) + 10) * (Math.random() < 0.5 ? -1 : 1); // ±10–16
+  const randomRot = (Math.floor(11 * Math.random()) + 10) * (Math.random() < 0.5 ? -1 : 1); // ±10–20
+  gsap.set(char, {
+    yPercent: randomY,
+    rotation: randomRot
+  });
+});
+
+
+const initialLogoX = textWidth - window.innerWidth / 2 + 10;
+
+gsap.set(".connect_logo", {
+  xPercent: -50,
+  yPercent: -50,
+  x: initialLogoX
+});
+
+const scrollText = gsap.timeline({
+  scrollTrigger: {
+    trigger: ".connect_content",
+    start: "top top",
+    end: `+=${textWidth + windowWidth}`,
+    scrub: true,
+    pin: true,
+    markers: true
+  }
+})
+.to(".connect_content", { x: -textWidth, duration: 8, ease: "none" }) // scroll text out to left
+// .to(".letter", {
+//   yPercent: 0,
+//   rotation: 0,
+//   duration: 1.5,
+//   ease: "power2.out"
+// }, "<")
+.to(".connect_logo", { x: 0, duration: 7, ease: "none" }, "<") // fly logo to center
+.to(".connect_logo", { scale: 0.1, duration: 2, ease: "elastic.out(1, 0.3)" })
+.to(".connect_logo", { opacity: 0, duration: 0.5, ease: "power2.out", onComplete: triggerLogoBurst });
+
+split.chars.forEach((char) => {
+  const rotation = gsap.getProperty(char, "rotation");
+  const yPercent = gsap.getProperty(char, "yPercent");
+
+  ScrollTrigger.create({
+    trigger: char,
+    markers: true,
+    start: "left-=500 center", // adjust based on scroll direction
+    // end: "+=100",
+    animation: gsap.fromTo(
+      char,
+      { rotation: rotation, yPercent: yPercent },
+      {
+        rotation: 0,
+        yPercent: 0,
+        ease: "elastic.out(1.2, 1)",
+        duration: 1.2
+      }
+    ),
+    scrub: true,
+    containerAnimation: scrollText 
+  });
+});
+
+
+
+function triggerLogoBurst() {
+  document.getElementById("explotionAnimation").style.display = "block";
+
+  const svgTemplate = `
+    <svg class="logo-burst" width="176" height="176" viewBox="0 0 176 176" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M49.8667 159.984C20.7849 152.819 12.4596 133.006 12.4596 87.9857C12.4596 42.9651 20.8132 23.1526 49.8667 15.987V0H0V176H49.8667V160.013V159.984Z" fill="black"/>
+      <path d="M126.134 0V15.9896C155.216 23.1564 163.541 42.9721 163.541 88C163.541 133.028 155.216 152.844 126.134 160.01V176H176V0H126.134Z" fill="black"/>
+    </svg>`;
+
+  const bg = document.getElementById("explotionBackground");
+  let logos = [];
+
+  for (let i = 0; i < 80; i++) {
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = svgTemplate;
+    const logo = wrapper.firstElementChild;
+    bg.appendChild(logo);
+    logos.push(logo);
+  }
+
+gsap.set(logos, {
+  scale: "random(0.2, 0.5)",
+  x: 100, // ← half of #explotionAnimation width
+  y: 100, // ← half of #explotionAnimation height
+  rotation: "random(0, 360)"
+});
+
+
+
+  gsap.to(logos, {
+    duration: 3,
+    physics2D: {
+      velocity: "random(200, 650)",
+      angle: "random(250, 290)",
+      gravity: 500
+    }
+  });
+}
+
+
 

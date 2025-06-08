@@ -64,7 +64,7 @@ document.querySelectorAll('.hero-svg-icon.special').forEach(icon => {
   
   
   //how we do
-  document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
 const allLis = document.querySelectorAll(".text_how-we");
 const tlHows = gsap.timeline();
 const heading = document.querySelector(".icon_how-we svg");
@@ -264,7 +264,7 @@ document.querySelectorAll('.our-result').forEach(caseEl => {
 
 //connect section
 
-
+document.addEventListener("DOMContentLoaded", () => {
 const textWidth = document.querySelector(".connect_content").offsetWidth;
 const windowWidth = window.innerWidth;
 
@@ -378,5 +378,5 @@ gsap.set(logos, {
   });
 }
 
-
+})
 

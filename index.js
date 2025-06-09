@@ -290,19 +290,7 @@ ScrollTrigger.create({
 
 console.log('textWidth:', textWidth, 'windowWidth:', windowWidth);
 
-let split = SplitText.create(".connect_content-after", {
-  type: "chars",
-  charsClass: "letter"
-});
 
-split.chars.forEach((char) => {
-  const randomY = (Math.floor(7 * Math.random()) + 10) * (Math.random() < 0.5 ? -1 : 1); // ±10–16
-  const randomRot = (Math.floor(11 * Math.random()) + 10) * (Math.random() < 0.5 ? -1 : 1); // ±10–20
-  gsap.set(char, {
-    yPercent: randomY,
-    rotation: randomRot
-  });
-});
 
 
 const initialLogoX = textWidth - window.innerWidth / 2 + 10;
@@ -335,28 +323,43 @@ const scrollText = gsap.timeline({
 .to(".connect_logo", { scale: 0.1, duration: 2, ease: "elastic.out(1, 0.3)" })
 .to(".connect_logo", { opacity: 0, duration: 0.5, ease: "power2.out", onComplete: triggerLogoBurst });
 
-split.chars.forEach((char) => {
-  const rotation = gsap.getProperty(char, "rotation");
-  const yPercent = gsap.getProperty(char, "yPercent");
 
-  ScrollTrigger.create({
-    trigger: char,
-    markers: true,
-    start: "left 20%",
-    end: "+=200",
-    animation: gsap.fromTo(
-      char,
-      { rotation: rotation, yPercent: yPercent },
-      {
-        rotation: 0,
-        yPercent: 0,
-        ease: "elastic.out(1.2, 1)"
-      }
-    ),
-    scrub: true,
-    containerAnimation: scrollText 
-  });
+let split = SplitText.create(".connect_content-after", {
+    type: "chars",
+    charsClass: "letter"
 });
+
+split.chars.forEach((char) => {
+    const randomY = (Math.floor(7 * Math.random()) + 10) * (Math.random() < 0.5 ? -1 : 1) * 10;
+    const randomRot = (Math.floor(11 * Math.random()) + 10) * (Math.random() < 0.5 ? -1 : 1);
+  
+    gsap.set(char, {
+      yPercent: randomY,
+      rotation: randomRot
+    });
+  
+    gsap.fromTo(
+      char,
+      {
+        yPercent: randomY,
+        rotation: randomRot
+      },
+      {
+        yPercent: 0,
+        rotation: 0,
+        ease: "elastic.out(1.2, 1)",
+        scrollTrigger: {
+          trigger: char,
+          containerAnimation: scrollText,
+          start: "left 100%",
+          end: "left 0%",
+          scrub: 0.5,
+          markers: false
+        }
+      }
+    );
+  });
+  
 
 
 

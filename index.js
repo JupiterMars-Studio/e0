@@ -64,7 +64,7 @@ document.querySelectorAll('.hero-svg-icon.special').forEach(icon => {
   
   
   //how we do
-document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
 const allLis = document.querySelectorAll(".text_how-we");
 const tlHows = gsap.timeline();
 const heading = document.querySelector(".icon_how-we svg");
@@ -263,11 +263,32 @@ document.querySelectorAll('.our-result').forEach(caseEl => {
 
 
 //connect section
-
-document.addEventListener("DOMContentLoaded", () => {
 const textWidth = document.querySelector(".connect_content").offsetWidth;
 const windowWidth = window.innerWidth;
+let footer = document.querySelector(".section_connect"),
+    getOverlap = () => Math.min(window.innerHeight, footer.offsetHeight), // we never want it to overlap more than the height of the screen
+    adjustFooterOverlap = () => footer.style.marginTop = -getOverlap() + "px"; // adjusts the margin-top of the footer to overlap the proper amount
 
+adjustFooterOverlap();
+
+// to make it responsive, re-calculate the margin-top on the footer when the ScrollTriggers revert
+ScrollTrigger.addEventListener("revert", adjustFooterOverlap);
+
+// magic
+ScrollTrigger.create({
+  trigger: footer,
+  start: () => "top " + (window.innerHeight - getOverlap()),
+  end: () => "+=" + (getOverlap() + textWidth + windowWidth),
+  pin: true,
+  markers: false
+});
+
+
+
+
+
+
+console.log('textWidth:', textWidth, 'windowWidth:', windowWidth);
 
 let split = SplitText.create(".connect_content-after", {
   type: "chars",
@@ -294,7 +315,7 @@ gsap.set(".connect_logo", {
 
 const scrollText = gsap.timeline({
   scrollTrigger: {
-    trigger: ".connect_content",
+    trigger: ".connect_wrapper",
     start: "top top",
     end: `+=${textWidth + windowWidth}`,
     scrub: true,
@@ -302,7 +323,8 @@ const scrollText = gsap.timeline({
     markers: true
   }
 })
-.to(".connect_content", { x: -textWidth, duration: 8, ease: "none" }) // scroll text out to left
+.to({}, { duration: 2 }) 
+.to(".connect_content", { x: -textWidth, duration: 8, ease: "none"}) // scroll text out to left
 // .to(".letter", {
 //   yPercent: 0,
 //   rotation: 0,
@@ -320,16 +342,15 @@ split.chars.forEach((char) => {
   ScrollTrigger.create({
     trigger: char,
     markers: true,
-    start: "left-=500 center", // adjust based on scroll direction
-    // end: "+=100",
+    start: "left 20%",
+    end: "+=200",
     animation: gsap.fromTo(
       char,
       { rotation: rotation, yPercent: yPercent },
       {
         rotation: 0,
         yPercent: 0,
-        ease: "elastic.out(1.2, 1)",
-        duration: 1.2
+        ease: "elastic.out(1.2, 1)"
       }
     ),
     scrub: true,
@@ -339,13 +360,19 @@ split.chars.forEach((char) => {
 
 
 
+let hasBurstRun = false; // flag to prevent re-running
+
 function triggerLogoBurst() {
-  document.getElementById("explotionAnimation").style.display = "block";
+  if (hasBurstRun) return;
+  hasBurstRun = true;
+
+  const explotionAnimation = document.getElementById("explotionAnimation");
+  explotionAnimation.style.display = "block";
 
   const svgTemplate = `
     <svg class="logo-burst" width="176" height="176" viewBox="0 0 176 176" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M49.8667 159.984C20.7849 152.819 12.4596 133.006 12.4596 87.9857C12.4596 42.9651 20.8132 23.1526 49.8667 15.987V0H0V176H49.8667V160.013V159.984Z" fill="black"/>
-      <path d="M126.134 0V15.9896C155.216 23.1564 163.541 42.9721 163.541 88C163.541 133.028 155.216 152.844 126.134 160.01V176H176V0H126.134Z" fill="black"/>
+      <path d="M49.8667 159.984C20.7849 152.819 12.4596 133.006 12.4596 87.9857C12.4596 42.9651 20.8132 23.1526 49.8667 15.987V0H0V176H49.8667V160.013V159.984Z" fill="#C4B5F2"/>
+      <path d="M126.134 0V15.9896C155.216 23.1564 163.541 42.9721 163.541 88C163.541 133.028 155.216 152.844 126.134 160.01V176H176V0H126.134Z" fill="#C4B5F2"/>
     </svg>`;
 
   const bg = document.getElementById("explotionBackground");
@@ -359,14 +386,12 @@ function triggerLogoBurst() {
     logos.push(logo);
   }
 
-gsap.set(logos, {
-  scale: "random(0.2, 0.5)",
-  x: 100, // ← half of #explotionAnimation width
-  y: 100, // ← half of #explotionAnimation height
-  rotation: "random(0, 360)"
-});
-
-
+  gsap.set(logos, {
+    scale: "random(0.2, 0.5)",
+    x: 100,
+    y: 100,
+    rotation: "random(0, 360)"
+  });
 
   gsap.to(logos, {
     duration: 3,
@@ -374,9 +399,16 @@ gsap.set(logos, {
       velocity: "random(200, 650)",
       angle: "random(250, 290)",
       gravity: 500
+    },
+    onComplete: () => {
+      // Clean up logos after burst
+      logos.forEach(logo => logo.remove());
+      explotionAnimation.style.display = "none";
+      hasBurstRun = false; 
     }
   });
 }
 
-})
+
+
 

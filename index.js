@@ -126,63 +126,6 @@ ScrollTrigger.create({
  });
   
   
-/*document.addEventListener("DOMContentLoaded", () => {
-  const allTexts = document.querySelectorAll(".text-move");
-
-  allTexts.forEach((el, index) => {
-    const isFirst = index === 0;
-    const isLast = index === allTexts.length - 1;
-    const color = getComputedStyle(el).getPropertyValue('--target-color') || '#ffffff';
-
-const tl = gsap.timeline({
-  scrollTrigger: {
-    trigger: el,
-    start: "top 20%",
-    end: "+=400px", // total scroll distance for the whole timeline
-    scrub: true,
-    markers: false,
-    invalidateOnRefresh:true,
-  }
-});
-
-if (!isFirst) {
-  tl.fromTo(el, {
-    x: -100,
-    opacity: 0.5,
-    color: '#ffffff'
-  }, {
-    x: 0,
-    opacity: 1,
-    color: color,
-  });
-}
-
-// Second half: animate out
-if (!isLast) {
-  tl.to(el, {
-    x: -100,
-    opacity: 0.5,
-    color: '#ffffff',
-  });
-}
-
-
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 20%",
-      end: "+=400px",
-      scrub: 0.5,
-      onUpdate: (self) => {
-        if (self.progress >= 0 && self.progress <= 1) {
-          const fillColor = gsap.utils.interpolate("white", color, self.progress * 2);
-          document.querySelectorAll('.icon_how-we-do svg path').forEach(path => {
-            path.setAttribute('fill', fillColor);
-          });
-        }
-      }
-    });
-  });
-});*/
 
 
 //our result
@@ -262,33 +205,202 @@ document.querySelectorAll('.our-result').forEach(caseEl => {
 });
 
 
+
+
+
+//whatwedo
+document.querySelectorAll('.what-we_services').forEach(itemsContainer => {
+    const items = Array.from(itemsContainer.querySelectorAll('.what-we_service-item'));
+    const itemCount = items.length;
+  
+    const itemWidth = 500; // estimate or use actual width
+    const itemHeight = 100; // estimate or use actual height
+    const padding = 20;
+  
+    const areaWidth = itemCount * (itemWidth + padding); // dynamic width
+    const areaHeight = window.innerHeight * 0.8; 
+  
+    const placedRects = [];
+  
+    itemsContainer.style.position = 'relative';
+    itemsContainer.style.width = `${areaWidth}px`;
+    itemsContainer.style.height = `${areaHeight}px`;
+  
+    items.forEach(item => {
+      let placed = false;
+      let attempts = 0;
+  
+      while (!placed && attempts < 300) {
+        const left = Math.random() * (areaWidth - itemWidth);
+        const top = Math.random() * (areaHeight - itemHeight);
+  
+        const newRect = {
+          left,
+          top,
+          right: left + itemWidth,
+          bottom: top + itemHeight
+        };
+  
+        const overlapping = placedRects.some(rect =>
+          isOverlapping(rect, newRect, padding)
+        );
+  
+        if (!overlapping) {
+          item.style.position = 'absolute';
+          item.style.left = `${left}px`;
+          item.style.top = `${top}px`;
+          placedRects.push(newRect);
+          placed = true;
+        }
+  
+        attempts++;
+      }
+  
+      if (!placed) {
+        console.warn("Could not place item without overlap");
+      }
+    });
+  
+    function isOverlapping(a, b, padding = 20) {
+      return !(
+        a.right + padding < b.left ||
+        a.left - padding > b.right ||
+        a.bottom + padding < b.top ||
+        a.top - padding > b.bottom
+      );
+    }
+  });
+  
+  
+  
+
+  
+  const panels = gsap.utils.toArray(".what-we_panel");
+  
+  const master = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".section_what-we",
+      pin: true,
+      scrub: 1,
+      markers: false,
+      start: "top top",
+      end: () => "+=" + window.innerWidth * panels.length * 4, // extra scroll space
+    }
+  });
+  
+  const BASE_SCROLL_SPEED = 500; // smaller = longer scroll
+  
+  panels.forEach((panel, i) => {
+    const inner = panel.querySelector(".what-we_inner") || panel.querySelector(".what-we_services");
+    const panelWidth = panel.offsetWidth;
+  
+    // Step 1: Slide horizontally to this panel
+    master.to(panels, {
+      xPercent: -100 * i,
+      duration: 0.5,
+      ease: "none",
+    });
+  
+    // Step 2: Scroll .inner if it overflows
+    if (inner && inner.scrollWidth > panelWidth) {
+      const scrollDistance = inner.scrollWidth - panelWidth;
+      const scrollDuration = scrollDistance / BASE_SCROLL_SPEED;
+  
+      master.to(inner, {
+        x: -scrollDistance,
+        ease: "none",
+        duration: 0.5
+      });
+    }
+  
+     const items = panel.querySelectorAll('.what-we_service-item[data-expand]');
+  
+    items.forEach((item) => {
+      const img = item.querySelector("img");
+      const svgs = item.querySelectorAll("svg");
+
+
+      if (img) {
+        gsap.fromTo(img,
+        { scale: 0, opacity: 0, width: 0, marginLeft: 0, marginRight: 0 },
+          {
+            scale: 1,
+            opacity: 1,
+            width: 'auto',
+            transformOrigin: "top right",
+            marginLeft: "-97px",   // Adjust based on your layout
+            marginRight: "-36px",
+            scrollTrigger: {
+              containerAnimation: master,
+              trigger: item,
+              start: "left 40%",
+              end: "left 20%",
+              scrub: true,
+              markers: false
+            }
+          }
+        );
+      }
+  
+      svgs.forEach(svg => {
+        gsap.fromTo(svg,
+          { scale: 1 },
+          {
+            scale: 2.5,
+             transformOrigin: "top right",
+              scrollTrigger: {
+              containerAnimation: master,
+              trigger: item,
+              start: "left 40%",
+              end: "left 20%",
+              scrub: true
+            }
+          }
+        );
+      });
+       });
+  });
+  
+
+
+
 //connect section
 const textWidth = document.querySelector(".connect_content").offsetWidth;
 const windowWidth = window.innerWidth;
-let footer = document.querySelector(".section_connect"),
-    getOverlap = () => Math.min(window.innerHeight, footer.offsetHeight), // we never want it to overlap more than the height of the screen
-    adjustFooterOverlap = () => footer.style.marginTop = -getOverlap() + "px"; // adjusts the margin-top of the footer to overlap the proper amount
+let footer = document.querySelector(".section_connect");
+const whatWeSection = document.querySelector(".section_what-we");
 
-adjustFooterOverlap();
+// Estimate how much vertical scroll the pinned section takes
+const pinnedScrollHeight = window.innerWidth * panels.length * 3;
 
-// to make it responsive, re-calculate the margin-top on the footer when the ScrollTriggers revert
-ScrollTrigger.addEventListener("revert", adjustFooterOverlap);
+const getOverlap = () => {
+  const baseHeight = footer.offsetHeight;
+  return Math.min(window.innerHeight, baseHeight + pinnedScrollHeight);
+};
 
-// magic
-ScrollTrigger.create({
-  trigger: footer,
-  start: () => "top " + (window.innerHeight - getOverlap()),
-  end: () => "+=" + (getOverlap() + textWidth + windowWidth),
-  pin: true,
-  markers: false
-});
+const adjustFooterOverlap = () => {
+    footer.style.marginTop = -getOverlap() + "px";
+  };
+  
+  adjustFooterOverlap();
+  
+  ScrollTrigger.addEventListener("revert", adjustFooterOverlap);
+  
+  ScrollTrigger.create({
+    trigger: footer,
+    start: () => "top " + (window.innerHeight - getOverlap()),
+    end: () => "+=" + (getOverlap() + textWidth + windowWidth),
+    pin: true,
+    markers: false
+  });
+  
 
 
 
 
 
 
-console.log('textWidth:', textWidth, 'windowWidth:', windowWidth);
+// console.log('textWidth:', textWidth, 'windowWidth:', windowWidth);
 
 
 
@@ -308,7 +420,7 @@ const scrollText = gsap.timeline({
     end: `+=${textWidth + windowWidth}`,
     scrub: true,
     pin: true,
-    markers: true
+    markers: false
   }
 })
 .to({}, { duration: 2 }) 
@@ -411,7 +523,3 @@ function triggerLogoBurst() {
     }
   });
 }
-
-
-
-

@@ -218,7 +218,7 @@ document.querySelectorAll('.what-we_services').forEach(itemsContainer => {
     const padding = 20;
   
     const areaWidth = itemCount * (itemWidth + padding); // dynamic width
-    const areaHeight = window.innerHeight * 0.8; 
+    const areaHeight = window.innerHeight * 0.6; 
   
     const placedRects = [];
   

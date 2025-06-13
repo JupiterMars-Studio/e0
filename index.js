@@ -385,13 +385,17 @@ const adjustFooterOverlap = () => {
   adjustFooterOverlap();
   
   ScrollTrigger.addEventListener("revert", adjustFooterOverlap);
+  console.log("this is total scroll", getOverlap() + textWidth + windowWidth);
   
   ScrollTrigger.create({
     trigger: footer,
     start: () => "top " + (window.innerHeight - getOverlap()),
     end: () => "+=" + (getOverlap() + textWidth + windowWidth),
     pin: true,
-    markers: false
+    markers: true,
+    onEnter: self => {
+        self.spacer.style.backgroundColor = "#140826";
+      }
   });
   
 
@@ -406,12 +410,16 @@ const adjustFooterOverlap = () => {
 
 
 const initialLogoX = textWidth - window.innerWidth / 2 + 10;
+const revealOffset = window.innerHeight * 2.08; 
+// console.log('revealOffset:', revealOffset);
 
 gsap.set(".connect_logo", {
   xPercent: -50,
   yPercent: -50,
   x: initialLogoX
 });
+
+gsap.set(".footer-wrapper", { height: "800px"})
 
 const scrollText = gsap.timeline({
   scrollTrigger: {
@@ -432,8 +440,61 @@ const scrollText = gsap.timeline({
 //   ease: "power2.out"
 // }, "<")
 .to(".connect_logo", { x: 0, duration: 7, ease: "none" }, "<") // fly logo to center
-.to(".connect_logo", { scale: 0.1, duration: 2, ease: "elastic.out(1, 0.3)" })
+.to(".connect_logo", { scale: 0.3, duration: 3, ease: "none", marginTop: "42px" })
+.to(".section_connect", {
+    height: "25vh",
+    duration: 4,
+    ease: "none"
+  }, "<")
+  .to(".footer", {
+    marginTop: -revealOffset,
+    duration: 0.5,
+    ease: "none"
+  }, "<")
+  .to(".footer", {
+    position: "sticky",
+    bottom: 0,
+    duration: 1,
+    ease: "none"
+  })
+  .to(".footer-wrapper", {
+    height: "900px",
+    ease: "none"
+  }, "<")
+  .to(".footer", {
+    marginTop: 0,
+    duration: 0.2,
+    ease: "power2.out",
+    delay: 0.5
+  })
+  .to(".footer-wrapper", {
+    height: "800px",
+    ease: "power2.out"
+  }, "<")
+  .to(".connect_form-wrapper", {
+    opacity: 1,
+    duration: 0.5,
+    ease: "power2.out"
+  }, "<")
 .to(".connect_logo", { opacity: 0, duration: 0.5, ease: "power2.out", onComplete: triggerLogoBurst });
+
+
+
+//   .to(".footer-wrapper", {
+//     height: "900px",
+//     ease: "none"
+//   }, "<")
+//   .to(".footer", {
+//     marginTop: 0,
+//     duration: 0.2,
+//     ease: "power2.out",
+//     delay: 0.5
+//   })
+//   .to(".footer-wrapper", {
+//     height: "720px",
+//     ease: "none"
+//   }, "<")
+
 
 
 let split = SplitText.create(".connect_content-after", {
@@ -523,3 +584,4 @@ function triggerLogoBurst() {
     }
   });
 }
+

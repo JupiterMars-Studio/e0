@@ -385,16 +385,32 @@ const adjustFooterOverlap = () => {
   adjustFooterOverlap();
   
   ScrollTrigger.addEventListener("revert", adjustFooterOverlap);
-  console.log("this is total scroll", getOverlap() + textWidth + windowWidth);
+//   console.log("this is total scroll", getOverlap() + textWidth + windowWidth);
   
   ScrollTrigger.create({
     trigger: footer,
     start: () => "top " + (window.innerHeight - getOverlap()),
-    end: () => "+=" + (getOverlap() + textWidth + windowWidth),
+    end: () => "+=" + (getOverlap() + textWidth + windowWidth ),
     pin: true,
-    markers: true,
-    onEnter: self => {
-        self.spacer.style.backgroundColor = "#140826";
+    markers: false,
+    // onEnter: self => {
+    //     self.spacer.style.backgroundColor = "#140826";
+    //   },
+      onLeave: () => {
+        const logo = document.querySelector(".connect_logo");
+        const footer = document.querySelector(".footer");
+    
+        if (logo && footer) {
+          // Get current screen position
+          const rect = logo.getBoundingClientRect();
+          const scrollY = window.scrollY;
+          const topOffset = rect.top + scrollY;
+    
+          // Move logo into footer
+          footer.appendChild(logo);
+    
+   
+        }
       }
   });
   
@@ -419,7 +435,10 @@ gsap.set(".connect_logo", {
   x: initialLogoX
 });
 
-gsap.set(".footer-wrapper", { height: "800px"})
+gsap.set(".footer-wrapper", { height: "700px"})
+
+
+
 
 const scrollText = gsap.timeline({
   scrollTrigger: {
@@ -440,43 +459,43 @@ const scrollText = gsap.timeline({
 //   ease: "power2.out"
 // }, "<")
 .to(".connect_logo", { x: 0, duration: 7, ease: "none" }, "<") // fly logo to center
-.to(".connect_logo", { scale: 0.3, duration: 3, ease: "none", marginTop: "42px" })
-.to(".section_connect", {
-    height: "25vh",
-    duration: 4,
-    ease: "none"
-  }, "<")
-  .to(".footer", {
-    marginTop: -revealOffset,
-    duration: 0.5,
-    ease: "none"
-  }, "<")
-  .to(".footer", {
-    position: "sticky",
-    bottom: 0,
-    duration: 1,
-    ease: "none"
-  })
-  .to(".footer-wrapper", {
-    height: "900px",
-    ease: "none"
-  }, "<")
-  .to(".footer", {
-    marginTop: 0,
-    duration: 0.2,
-    ease: "power2.out",
-    delay: 0.5
-  })
-  .to(".footer-wrapper", {
-    height: "800px",
-    ease: "power2.out"
-  }, "<")
-  .to(".connect_form-wrapper", {
-    opacity: 1,
-    duration: 0.5,
-    ease: "power2.out"
-  }, "<")
-.to(".connect_logo", { opacity: 0, duration: 0.5, ease: "power2.out", onComplete: triggerLogoBurst });
+// .to(".connect_logo", { scale: 0.3, duration: 3, ease: "none", marginTop: "42px" })
+// .to(".section_connect", {
+//     height: "25vh",
+//     duration: 4,
+//     ease: "none"
+//   }, "<")
+//   .to(".footer", {
+//     marginTop: -revealOffset,
+//     duration: 0.5,
+//     ease: "none"
+//   }, "<")
+//   .to(".footer", {
+//     position: "sticky",
+//     bottom: 0,
+//     duration: 1,
+//     ease: "none"
+//   })
+//   .to(".footer-wrapper", {
+//     height: "900px",
+//     ease: "none"
+//   }, "<")
+//   .to(".footer", {
+//     marginTop: 0,
+//     duration: 0.2,
+//     ease: "power2.out",
+//     delay: 0.5
+//   })
+//   .to(".footer-wrapper", {
+//     height: "800px",
+//     ease: "power2.out"
+//   }, "<")
+//   .to(".connect_form-wrapper", {
+//     opacity: 1,
+//     duration: 0.5,
+//     ease: "power2.out"
+//   }, "<")
+// .to(".connect_logo", { opacity: 0, duration: 0.5, ease: "power2.out", onComplete: triggerLogoBurst });
 
 
 
@@ -494,6 +513,58 @@ const scrollText = gsap.timeline({
 //     height: "720px",
 //     ease: "none"
 //   }, "<")
+
+
+const postScrollLogoAnim = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".footer",
+      start: "top bottom",
+      end: "+=1000",
+      scrub: true,
+      markers: false
+    }
+  });
+  
+
+  gsap.set(".connect_form", { height: "0px", display: "none" });
+  postScrollLogoAnim
+
+.to(".connect_logo", {
+    //   scale: 0.3,
+      top: "23%",
+      ease: "none",
+      duration: 2
+    }, 3)
+    .to(".footer-wrapper", {
+        height: "890px",
+        ease: "none",
+        duration: 2,
+      })
+      .to(".footer", {
+        position: "sticky",
+        paddingTop: "100px",
+        bottom: 0,
+        duration: 2,
+      }, "<")
+      .to(".connect_logo", {
+          scale: 0.3,
+          top: "12%",
+          ease: "none",
+          duration: 2
+        }, "<")
+    .to(".connect_logo", {
+    opacity: 0,
+    duration: 0.5,
+    ease: "power2.out",
+    onComplete: triggerLogoBurst
+  })
+  .to(".connect_form-wrapper", { opacity: 1, ease: "power2.out", duration: 0.1 }, "<")
+.to(".connect_form", { height: "max-content", display: "flex", ease: "power2.out", paddingBottom: "60px", duration: 0.5 }, "<")
+.to(".footer-wrapper", {
+    height: "700px",
+    ease: "power2.out",
+    duration: 0.5
+  }, "<")
 
 
 
@@ -524,7 +595,7 @@ split.chars.forEach((char) => {
         scrollTrigger: {
           trigger: char,
           containerAnimation: scrollText,
-          start: "left 100%",
+          start: "left 80%",
           end: "left 0%",
           scrub: 0.5,
           markers: false
@@ -563,16 +634,16 @@ function triggerLogoBurst() {
   }
 
   gsap.set(logos, {
-    scale: "random(0.2, 0.5)",
+    scale: "random(0.5, 1)",
     x: 100,
     y: 100,
     rotation: "random(0, 360)"
   });
 
   gsap.to(logos, {
-    duration: 3,
+    duration: 5,
     physics2D: {
-      velocity: "random(200, 650)",
+      velocity: "random(200, 1000)",
       angle: "random(250, 290)",
       gravity: 500
     },

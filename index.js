@@ -4,8 +4,8 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 
 //hero
 const heroGrid = document.getElementById("hero-grid");
-  const specialIndexes = [23, 145, 302, 394, 513];
-  const texts = ["Hi this is something", "B2B MARKETING DESIGN", "Dev", "SVG", "Fun"];
+  const specialIndexes = [368, 394, 476, 500];
+  const texts = ["B2B Design", "B2B MARKETING DESIGN", "B2B Design Ops", "B2B Branding"];
 
   for (let i = 0; i < 30 * 18; i++) {
     const wrapper = document.createElement("div");
@@ -396,22 +396,22 @@ const adjustFooterOverlap = () => {
     // onEnter: self => {
     //     self.spacer.style.backgroundColor = "#140826";
     //   },
-      onLeave: () => {
-        const logo = document.querySelector(".connect_logo");
-        const footer = document.querySelector(".footer");
+    //   onLeave: () => {
+    //     const logo = document.querySelector(".connect_logo");
+    //     const footer = document.querySelector(".footer");
     
-        if (logo && footer) {
-          // Get current screen position
-          const rect = logo.getBoundingClientRect();
-          const scrollY = window.scrollY;
-          const topOffset = rect.top + scrollY;
+    //     if (logo && footer) {
+    //       // Get current screen position
+    //       const rect = logo.getBoundingClientRect();
+    //       const scrollY = window.scrollY;
+    //       const topOffset = rect.top + scrollY;
     
-          // Move logo into footer
-          footer.appendChild(logo);
+    //       // Move logo into footer
+    //       footer.appendChild(logo);
     
    
-        }
-      }
+    //     }
+    //   }
   });
   
 
@@ -460,59 +460,8 @@ const scrollText = gsap.timeline({
 // }, "<")
 .to(".connect_logo", { x: 0, duration: 7, ease: "none" }, "<") // fly logo to center
 // .to(".connect_logo", { scale: 0.3, duration: 3, ease: "none", marginTop: "42px" })
-// .to(".section_connect", {
-//     height: "25vh",
-//     duration: 4,
-//     ease: "none"
-//   }, "<")
-//   .to(".footer", {
-//     marginTop: -revealOffset,
-//     duration: 0.5,
-//     ease: "none"
-//   }, "<")
-//   .to(".footer", {
-//     position: "sticky",
-//     bottom: 0,
-//     duration: 1,
-//     ease: "none"
-//   })
-//   .to(".footer-wrapper", {
-//     height: "900px",
-//     ease: "none"
-//   }, "<")
-//   .to(".footer", {
-//     marginTop: 0,
-//     duration: 0.2,
-//     ease: "power2.out",
-//     delay: 0.5
-//   })
-//   .to(".footer-wrapper", {
-//     height: "800px",
-//     ease: "power2.out"
-//   }, "<")
-//   .to(".connect_form-wrapper", {
-//     opacity: 1,
-//     duration: 0.5,
-//     ease: "power2.out"
-//   }, "<")
 // .to(".connect_logo", { opacity: 0, duration: 0.5, ease: "power2.out", onComplete: triggerLogoBurst });
 
-
-
-//   .to(".footer-wrapper", {
-//     height: "900px",
-//     ease: "none"
-//   }, "<")
-//   .to(".footer", {
-//     marginTop: 0,
-//     duration: 0.2,
-//     ease: "power2.out",
-//     delay: 0.5
-//   })
-//   .to(".footer-wrapper", {
-//     height: "720px",
-//     ease: "none"
-//   }, "<")
 
 
 const postScrollLogoAnim = gsap.timeline({

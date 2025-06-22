@@ -1,13 +1,110 @@
 
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
+const windowWidth = window.innerWidth;
+const isMobile = window.innerWidth <= 768; 
+//loader
+gsap.set(".loader", { opacity: 1, display: "flex" });
+const wrapper = document.querySelector('.svg-wrapper');
+const original = document.querySelector('.svg-container');
+
+  // Add class 'first' to the original (first) element
+original.classList.add('first');
+
+const totalCount = isMobile ? 18 : 35;
+console.log(totalCount)
+  for (let i = 1; i < totalCount; i++) {
+    const clone = original.cloneNode(true);
+
+    if (i === 1) {
+      clone.classList.remove('first');
+      clone.classList.add('second');
+    } else {
+      clone.classList.remove('first');
+      clone.classList.add('show');
+    }
+
+    wrapper.appendChild(clone);
+  }
+
+
+const wrapperWidth = document.querySelector(".svg-wrapper").offsetWidth;
+const svgCount = 32;
+const gap = isMobile ? 8 : 16;
+const svgWidth = document.querySelector(".svg-container").offsetWidth;
+
+const moveDistance = wrapperWidth - (svgWidth*2) - gap;
+
+gsap.set(".bracket-text", {opacity: 0});
+gsap.set(".section_home-header", {y: "100vh"});
+gsap.set(".section_scrolling-logo", {y: "100vh"});
+gsap.set(".navbar", {opacity: 0});
+gsap.set(".hero-grid", {opacity: 0});
+gsap.set(".bracket-end", {opacity: 0});
+gsap.set(".link-hover-line", {opacity: 0});
+gsap.set(".video-mask", {x: isMobile ? "36px" : "75px"})
+gsap.set(".masking-left", {width: "120px", display: "block"});
+gsap.set(".masking-right", {width: "333px", display: "block"});
+
+
+const navbarWidth = document.querySelector(".navbar-container").offsetWidth;
+const bracketWidth = (navbarWidth - ((isMobile ? 8 : 12.47) * 2) - 20) / 2;
+
+
+
+const tl = gsap.timeline()
+  .from(".show", {visibility: "hidden", stagger: 0.1, ease: "none"})
+  .to(".second", {x: moveDistance, ease: "none", duration: isMobile ? 0.3 : 0.64, delay: 1})
+  .to(".show", {
+  visibility: "hidden",
+  stagger: {
+    each: 0.02,
+    from: "start" // ensures first to last
+  },
+  ease: "none"
+}, "<")
+  .to(".bracket-text", {opacity: 1, duration: 0.5, ease: "none"}, "<=0.2")
+  .to(".svg-container", {opacity: 0, delay: 1})
+  .to(".background-video", {width: "100%", height: "50vh", duration: 2, ease: "none"})
+  .to(".video-mask", {x: 0, duration: 2, ease: "none"}, "<")
+  .to(".company-1", {scale: isMobile ? 4 : 6, duration: 2, ease: "none", x: "-120vw", y: "-40vh"}, "<")
+  .to(".company-2", {scale: isMobile ? 4 : 6, duration: 2, ease: "none", x: "120vw", y: "-40vh"}, "<")
+  .to(".video-mask", {bottom: "10%", top: "10%", duration: 0.5, ease: "none"})
+  .to(".background-video", {height: "80vh", duration: 1.5, ease: "none"}, "<")
+  .to(".video-mask", {top: "0%", bottom: "unset", duration: 1, ease: "none"})
+  .to(".background-video", {height: isMobile ? "27px" : "44px", width: isMobile ? "27px" : "44px", duration: 1.5, ease: "none"})
+
+  .to(".section_home-header", {y: 0, duration: 2, ease: "none"}, "<")
+  .to(".bracket-end", {opacity: 1, duration: 0.5, ease: "none"})
+  .to(".section_scrolling-logo", {y: 0, duration: 1, ease: "power2.out"}, "<")
+  .to(".navbar", {opacity: 1, duration: 0.5, ease: "none"})
+  .to(".bracket-end", {opacity: 0, duration: 0.5, ease: "none"}, "<")
+  .to(".bracket-end-nav", {display: "flex", duration: 0.5, ease: "none"}, "<")
+  .to(".logo-right-nav", {x: bracketWidth, duration: 0.5, ease: "none"}, "<")
+  .to(".logo-left-nav", {x: -bracketWidth, duration: 0.5, ease: "none"}, "<")
+  .to(".link-hover-line", {opacity: 1, duration: 0.5, ease: "none"}, "<")
+  .to(".video-mask", {display: "none", duration: 0}, "<")
+  .to(".loader", {backgroundColor: "transparent", duration: 0.5, ease: "none"}, "<")
+  .to(".logo-right-nav", {opacity: 0, duration: 0.2, ease: "none"})
+  .to(".masking-right", { x: -333, width: "0px", duration: 1, ease: "none"}, "<")
+  .to(".masking-left", { x: 34, width: "0px", duration: 1, ease: "none"}, "<")
+  .to(".bracket-end-nav", {display: "none", duration: 0, ease: "none"})
+  .to(".hero-grid", {opacity: 1, duration: 1, ease: "none"})
+  .to(".loader", {display: "none"})
+
+
+// GSDevTools.create({animation: tl});
+
 
 //hero
 const heroGrid = document.getElementById("hero-grid");
   const specialIndexes = [368, 394, 476, 500];
   const texts = ["B2B Design", "B2B MARKETING DESIGN", "B2B Design Ops", "B2B Branding"];
 
-  for (let i = 0; i < 30 * 18; i++) {
+  const rows = isMobile ? 19 : 18;
+  const columns = isMobile ? 11 : 30;
+
+for (let i = 0; i < rows * columns; i++) {
     const wrapper = document.createElement("div");
 wrapper.classList.add("hero-svg-wrapper");
     const iconWrapper = document.createElement("div");
@@ -64,7 +161,7 @@ document.querySelectorAll('.hero-svg-icon.special').forEach(icon => {
   
   
   //how we do
-  document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
 const allLis = document.querySelectorAll(".text_how-we");
 const tlHows = gsap.timeline();
 const heading = document.querySelector(".icon_how-we svg");
@@ -213,18 +310,19 @@ document.querySelectorAll('.what-we_services').forEach(itemsContainer => {
     const items = Array.from(itemsContainer.querySelectorAll('.what-we_service-item'));
     const itemCount = items.length;
   
-    const itemWidth = 500; // estimate or use actual width
-    const itemHeight = 100; // estimate or use actual height
+    const itemWidth = isMobile ? 300 : 500; // estimate or use actual width
+    const itemHeight =  isMobile ? 34 : 100; // estimate or use actual height
     const padding = 20;
   
     const areaWidth = itemCount * (itemWidth + padding); // dynamic width
-    const areaHeight = window.innerHeight * 0.6; 
+    const areaHeight = isMobile ? window.innerHeight * 0.45 : window.innerHeight * 0.6; 
   
     const placedRects = [];
-  
+if (window.innerWidth > 768) {
     itemsContainer.style.position = 'relative';
     itemsContainer.style.width = `${areaWidth}px`;
     itemsContainer.style.height = `${areaHeight}px`;
+}
   
     items.forEach(item => {
       let placed = false;
@@ -276,7 +374,7 @@ document.querySelectorAll('.what-we_services').forEach(itemsContainer => {
 
   
   const panels = gsap.utils.toArray(".what-we_panel");
-  
+    if (window.innerWidth > 768) {
   const master = gsap.timeline({
     scrollTrigger: {
       trigger: ".section_what-we",
@@ -289,7 +387,7 @@ document.querySelectorAll('.what-we_services').forEach(itemsContainer => {
   });
   
   const BASE_SCROLL_SPEED = 500; // smaller = longer scroll
-  
+
   panels.forEach((panel, i) => {
     const inner = panel.querySelector(".what-we_inner") || panel.querySelector(".what-we_services");
     const panelWidth = panel.offsetWidth;
@@ -361,12 +459,35 @@ document.querySelectorAll('.what-we_services').forEach(itemsContainer => {
        });
   });
   
+} else {
+
+  panels.forEach((panel, i) => {
+    const service = panel.querySelector(".what-we_services");
+    gsap.set(service, { x: window.innerWidth });
+    if (service) {
+      gsap.to(service, {
+      x: () => -(
+        service.scrollWidth - service.parentElement.offsetWidth
+      ),
+      duration: 10, 
+      ease: 'none',
+      scrollTrigger: {
+        trigger: panel,
+        start: 'top top',
+        toggleActions: 'play complete reverse reset', 
+        // markers: true,
+        id: `mobile-service-${i}`
+      }
+    });
+    }
+  });
+}
 
 
 
 //connect section
 const textWidth = document.querySelector(".connect_content").offsetWidth;
-const windowWidth = window.innerWidth;
+
 let footer = document.querySelector(".section_connect");
 const whatWeSection = document.querySelector(".section_what-we");
 
@@ -393,9 +514,9 @@ const adjustFooterOverlap = () => {
     end: () => "+=" + (getOverlap() + textWidth + windowWidth ),
     pin: true,
     markers: false,
-    // onEnter: self => {
-    //     self.spacer.style.backgroundColor = "#140826";
-    //   },
+    onEnter: self => {
+        self.spacer.style.backgroundColor = "#140826";
+      },
     //   onLeave: () => {
     //     const logo = document.querySelector(".connect_logo");
     //     const footer = document.querySelector(".footer");
@@ -435,7 +556,7 @@ gsap.set(".connect_logo", {
   x: initialLogoX
 });
 
-gsap.set(".footer-wrapper", { height: "700px"})
+gsap.set(".footer-wrapper", { height: "70vh"})
 
 
 
@@ -452,13 +573,7 @@ const scrollText = gsap.timeline({
 })
 .to({}, { duration: 2 }) 
 .to(".connect_content", { x: -textWidth, duration: 8, ease: "none"}) // scroll text out to left
-// .to(".letter", {
-//   yPercent: 0,
-//   rotation: 0,
-//   duration: 1.5,
-//   ease: "power2.out"
-// }, "<")
-.to(".connect_logo", { x: 0, duration: 7, ease: "none" }, "<") // fly logo to center
+.to(".connect_logo", { x: 0, duration: isMobile ? 8 : 7, ease: "none" }, "<") // fly logo to center
 // .to(".connect_logo", { scale: 0.3, duration: 3, ease: "none", marginTop: "42px" })
 // .to(".connect_logo", { opacity: 0, duration: 0.5, ease: "power2.out", onComplete: triggerLogoBurst });
 
@@ -467,10 +582,10 @@ const scrollText = gsap.timeline({
 const postScrollLogoAnim = gsap.timeline({
     scrollTrigger: {
       trigger: ".footer",
-      start: "top bottom",
-      end: "+=1000",
+      start: isMobile ? "top+=200 bottom" : "top bottom",
+      end: `+=${window.innerHeight}`,
       scrub: true,
-      markers: false
+      markers: true
     }
   });
   
@@ -485,13 +600,13 @@ const postScrollLogoAnim = gsap.timeline({
       duration: 2
     }, 3)
     .to(".footer-wrapper", {
-        height: "890px",
+        height: "80vh",
         ease: "none",
         duration: 2,
       })
       .to(".footer", {
         position: "sticky",
-        paddingTop: "100px",
+        paddingTop: "10vh",
         bottom: 0,
         duration: 2,
       }, "<")
@@ -507,10 +622,10 @@ const postScrollLogoAnim = gsap.timeline({
     ease: "power2.out",
     onComplete: triggerLogoBurst
   })
-  .to(".connect_form-wrapper", { opacity: 1, ease: "power2.out", duration: 0.1 }, "<")
-.to(".connect_form", { height: "max-content", display: "flex", ease: "power2.out", paddingBottom: "60px", duration: 0.5 }, "<")
+  .to(".connect_form-wrapper", { opacity: 1, marginTop: "20vh", ease: "power2.out", duration: 0.1 }, "<")
+.to(".connect_form", { height: "max-content", display: "flex", ease: "power2.out", paddingBottom: "0px", duration: 0.5 }, "<")
 .to(".footer-wrapper", {
-    height: "700px",
+    height: "60vh",
     ease: "power2.out",
     duration: 0.5
   }, "<")
@@ -605,3 +720,11 @@ function triggerLogoBurst() {
   });
 }
 
+
+window.addEventListener("load", () => {
+  ScrollTrigger.refresh();
+});
+
+window.addEventListener("resize", () => {
+  ScrollTrigger.refresh();
+});

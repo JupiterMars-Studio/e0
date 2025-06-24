@@ -574,17 +574,12 @@ const scrollText = gsap.timeline({
 .to({}, { duration: 2 }) 
 .to(".connect_content", { x: -textWidth, duration: 8, ease: "none"}) // scroll text out to left
 .to(".connect_logo", { x: 0, duration: isMobile ? 8 : 7, ease: "none" }, "<") // fly logo to center
-// .call(() => {
-//   postScrollLogoAnim.play();
-// })
-
 
 
 const postScrollLogoAnim = gsap.timeline({
     scrollTrigger: {
       trigger: ".section_footer",
       start: isMobile ? "top+=200 bottom" : "top bottom",
-      // start: isMobile ? "top+=200 bottom" : "bottom bottom",
       end: `+=${window.innerHeight}`,
       scrub: true,
       markers: false,
@@ -608,7 +603,7 @@ const postScrollLogoAnim = gsap.timeline({
 
       .to(".connect_logo", {
 
-          top: "16%",
+          top: isMobile ? "25%" : "16%",
           ease: "none",
           duration: 1.5
         }, "<+1")

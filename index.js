@@ -93,7 +93,7 @@ const tl = gsap.timeline()
   .to(".loader", {display: "none"})
 
 
-// GSDevTools.create({animation: tl});
+
 
 
 //hero
@@ -574,62 +574,65 @@ const scrollText = gsap.timeline({
 .to({}, { duration: 2 }) 
 .to(".connect_content", { x: -textWidth, duration: 8, ease: "none"}) // scroll text out to left
 .to(".connect_logo", { x: 0, duration: isMobile ? 8 : 7, ease: "none" }, "<") // fly logo to center
-// .to(".connect_logo", { scale: 0.3, duration: 3, ease: "none", marginTop: "42px" })
-// .to(".connect_logo", { opacity: 0, duration: 0.5, ease: "power2.out", onComplete: triggerLogoBurst });
+// .call(() => {
+//   postScrollLogoAnim.play();
+// })
 
 
 
 const postScrollLogoAnim = gsap.timeline({
     scrollTrigger: {
-      trigger: ".footer",
+      trigger: ".section_footer",
       start: isMobile ? "top+=200 bottom" : "top bottom",
+      // start: isMobile ? "top+=200 bottom" : "bottom bottom",
       end: `+=${window.innerHeight}`,
       scrub: true,
-      markers: true
+      markers: false,
+      toggleActions: 'play reverse reset reverse', 
     }
   });
   
 
   gsap.set(".connect_form", { height: "0px", display: "none" });
   postScrollLogoAnim
-
-.to(".connect_logo", {
-    //   scale: 0.3,
-      top: "23%",
-      ease: "none",
-      duration: 2
-    }, 3)
-    .to(".footer-wrapper", {
-        height: "80vh",
+      .to(".footer", {
+        position: "sticky",
+        bottom: 0,
+        duration: 1,
+      })    
+.to(".footer-wrapper", {
+        height: "90vh",
         ease: "none",
         duration: 2,
       })
-      .to(".footer", {
-        position: "sticky",
-        paddingTop: "10vh",
-        bottom: 0,
-        duration: 2,
-      }, "<")
+
       .to(".connect_logo", {
-          scale: 0.3,
-          top: "12%",
+
+          top: "16%",
           ease: "none",
-          duration: 2
-        }, "<")
+          duration: 1.5
+        }, "<+1")
+        .to(".connect_logo", {
+          scale: 0.3,
+          ease: "none",
+          duration: 0.9
+        })
     .to(".connect_logo", {
     opacity: 0,
-    duration: 0.5,
-    ease: "power2.out",
+    duration: 0.1,
+    ease: "none",
     onComplete: triggerLogoBurst
   })
-  .to(".connect_form-wrapper", { opacity: 1, marginTop: "20vh", ease: "power2.out", duration: 0.1 }, "<")
-.to(".connect_form", { height: "max-content", display: "flex", ease: "power2.out", paddingBottom: "0px", duration: 0.5 }, "<")
+  .to(".connect_form-wrapper", { opacity: 1, marginTop: "20vh", ease: "power2.out", duration: 0.4 }, "<")
+.to(".connect_form", { height: "max-content", display: "flex", ease: "power2.out", paddingBottom: "0px", duration: 0.4, delay: 0.1 }, "<")
 .to(".footer-wrapper", {
     height: "60vh",
     ease: "power2.out",
     duration: 0.5
   }, "<")
 
+
+  // GSDevTools.create({animation: postScrollLogoAnim});
 
 
 let split = SplitText.create(".connect_content-after", {
@@ -728,3 +731,4 @@ window.addEventListener("load", () => {
 window.addEventListener("resize", () => {
   ScrollTrigger.refresh();
 });
+

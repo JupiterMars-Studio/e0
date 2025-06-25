@@ -12,7 +12,7 @@ const original = document.querySelector('.svg-container');
 original.classList.add('first');
 
 const totalCount = isMobile ? 18 : 35;
-console.log(totalCount)
+// console.log(totalCount)
   for (let i = 1; i < totalCount; i++) {
     const clone = original.cloneNode(true);
 
@@ -99,6 +99,7 @@ const tl = gsap.timeline()
 //hero
 const heroGrid = document.getElementById("hero-grid");
   const specialIndexes = [368, 394, 476, 500];
+  const specialMobileIndexes = [180, 196, 160, 166];
   const texts = ["B2B Design", "B2B MARKETING DESIGN", "B2B Design Ops", "B2B Branding"];
 
   const rows = isMobile ? 19 : 18;
@@ -110,7 +111,8 @@ wrapper.classList.add("hero-svg-wrapper");
     const iconWrapper = document.createElement("div");
     iconWrapper.classList.add("hero-svg-icon");
 
-    const isSpecial = specialIndexes.includes(i);
+    const activeSpecialIndexes = isMobile ? specialMobileIndexes : specialIndexes;
+    const isSpecial = activeSpecialIndexes.includes(i);
     if (isSpecial) iconWrapper.classList.add("special");
 
     iconWrapper.innerHTML = `
@@ -307,42 +309,42 @@ document.querySelectorAll('.our-result').forEach(caseEl => {
 
 //whatwedo
 document.querySelectorAll('.what-we_services').forEach(itemsContainer => {
-    const items = Array.from(itemsContainer.querySelectorAll('.what-we_service-item'));
-    const itemCount = items.length;
-  
-    const itemWidth = isMobile ? 300 : 500; // estimate or use actual width
-    const itemHeight =  isMobile ? 34 : 100; // estimate or use actual height
-    const padding = 20;
-  
-    const areaWidth = itemCount * (itemWidth + padding); // dynamic width
-    const areaHeight = isMobile ? window.innerHeight * 0.45 : window.innerHeight * 0.6; 
-  
-    const placedRects = [];
-if (window.innerWidth > 768) {
+  const items = Array.from(itemsContainer.querySelectorAll('.what-we_service-item'));
+  const itemCount = items.length;
+
+  const itemWidth = 500;
+  const itemHeight = 100;
+  const padding = 20;
+
+  const areaWidth = isMobile ? window.innerWidth : itemCount * (itemWidth + padding);
+  const areaHeight = isMobile ? window.innerHeight * 0.45 : window.innerHeight * 0.6;
+
+  const placedRects = [];
+
+  if (isMobile != true) {
     itemsContainer.style.position = 'relative';
     itemsContainer.style.width = `${areaWidth}px`;
     itemsContainer.style.height = `${areaHeight}px`;
-}
-  
+
     items.forEach(item => {
       let placed = false;
       let attempts = 0;
-  
+
       while (!placed && attempts < 300) {
         const left = Math.random() * (areaWidth - itemWidth);
         const top = Math.random() * (areaHeight - itemHeight);
-  
+
         const newRect = {
           left,
           top,
           right: left + itemWidth,
           bottom: top + itemHeight
         };
-  
+
         const overlapping = placedRects.some(rect =>
           isOverlapping(rect, newRect, padding)
         );
-  
+
         if (!overlapping) {
           item.style.position = 'absolute';
           item.style.left = `${left}px`;
@@ -350,43 +352,51 @@ if (window.innerWidth > 768) {
           placedRects.push(newRect);
           placed = true;
         }
-  
+
         attempts++;
       }
-  
+
       if (!placed) {
         console.warn("Could not place item without overlap");
       }
     });
-  
-    function isOverlapping(a, b, padding = 20) {
-      return !(
-        a.right + padding < b.left ||
-        a.left - padding > b.right ||
-        a.bottom + padding < b.top ||
-        a.top - padding > b.bottom
-      );
-    }
-  });
+  } else {
+    items.forEach(item => {
+        const maxMarginLeft = window.innerWidth - item.offsetWidth;
+        const randomMarginLeft = Math.random() * maxMarginLeft;
+        item.style.marginLeft = `${randomMarginLeft}px`;
+      });
+  }
+
+  function isOverlapping(a, b, padding = 20) {
+    return !(
+      a.right + padding < b.left ||
+      a.left - padding > b.right ||
+      a.bottom + padding < b.top ||
+      a.top - padding > b.bottom
+    );
+  }
+});
+
   
   
   
 
   
   const panels = gsap.utils.toArray(".what-we_panel");
-    if (window.innerWidth > 768) {
+if (isMobile != true) {
   const master = gsap.timeline({
     scrollTrigger: {
       trigger: ".section_what-we",
       pin: true,
-      scrub: 1,
+      scrub: true,
       markers: false,
       start: "top top",
       end: () => "+=" + window.innerWidth * panels.length * 4, // extra scroll space
     }
   });
   
-  const BASE_SCROLL_SPEED = 500; // smaller = longer scroll
+  const BASE_SCROLL_SPEED = 1000; // smaller = longer scroll
 
   panels.forEach((panel, i) => {
     const inner = panel.querySelector(".what-we_inner") || panel.querySelector(".what-we_services");
@@ -404,11 +414,16 @@ if (window.innerWidth > 768) {
       const scrollDistance = inner.scrollWidth - panelWidth;
       const scrollDuration = scrollDistance / BASE_SCROLL_SPEED;
   
-      master.to(inner, {
-        x: -scrollDistance,
-        ease: "none",
-        duration: 0.5
-      });
+
+if (scrollDistance > 0) {
+  master.to(inner, {
+    x: -scrollDistance,
+    ease: "none",
+    duration: scrollDistance / BASE_SCROLL_SPEED
+  });
+} else {
+  master.to({}, { duration: 0.3 }); // filler time if no scroll needed
+}
     }
   
      const items = panel.querySelectorAll('.what-we_service-item[data-expand]');
@@ -416,6 +431,7 @@ if (window.innerWidth > 768) {
     items.forEach((item) => {
       const img = item.querySelector("img");
       const svgs = item.querySelectorAll("svg");
+      const wrapper = item.querySelector(".what-we_service-item-icon");
 
 
       if (img) {
@@ -426,13 +442,13 @@ if (window.innerWidth > 768) {
             opacity: 1,
             width: 'auto',
             transformOrigin: "top right",
-            marginLeft: "-97px",   // Adjust based on your layout
-            marginRight: "-36px",
+            marginLeft: "-43px",  
+            marginRight: "-18px",
             scrollTrigger: {
               containerAnimation: master,
               trigger: item,
-              start: "left 40%",
-              end: "left 20%",
+              start: "left 50%",
+              end: "left 30%",
               scrub: true,
               markers: false
             }
@@ -449,42 +465,99 @@ if (window.innerWidth > 768) {
               scrollTrigger: {
               containerAnimation: master,
               trigger: item,
-              start: "left 40%",
-              end: "left 20%",
+              start: "left 50%",
+              end: "left 30%",
+              scrub: true
+            }
+          }
+        );
+      });
+
+      if (wrapper) {
+        gsap.to(wrapper, {gridColumnGap: "0px",
+            scrollTrigger: {
+              containerAnimation: master,
+              trigger: item,
+              start: "left 50%",
+              end: "left 30%",
+              scrub: true,
+              markers: false
+            }
+        })
+      }
+       });
+  });
+  
+} else {
+// Mobile version
+  panels.forEach((panel) => {
+    const items = panel.querySelectorAll('.what-we_service-item[data-expand]');
+
+    items.forEach((item) => {
+      const wrapper = item.querySelector(".what-we_service-item-icon");
+      const img = item.querySelector("img");
+      const svgs = item.querySelectorAll("svg");
+
+      if (wrapper) {
+        gsap.to(wrapper, {gridColumnGap: "0px",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 80%",
+              end: "+=200",
+              scrub: true,
+              markers: false
+            }
+        })
+      }
+
+
+      if (img) {
+        gsap.fromTo(img,
+        { display: "none", scale: 0, opacity: 0, width: 0, marginLeft: 0, marginRight: 0 },
+          {
+            scale: 1,
+            opacity: 1,
+            display: "block",
+            width: 'auto',
+            transformOrigin: "top right",
+            marginRight: "-1px",
+            marginLeft: "-13px",
+            duration: 2,
+            ease: "none",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 80%",
+              end: "+=200",
+              scrub: true,
+              markers: false
+            }
+          }
+        );
+      }
+  
+      svgs.forEach(svg => {
+        gsap.fromTo(svg,
+          { scale: 1 },
+          {
+            scale: 2.5,
+            ease: "none",
+             transformOrigin: "top right",
+              scrollTrigger: {
+              trigger: item,
+              start: "top 80%",
+              duration: 1,
+              end: "+=200",
               scrub: true
             }
           }
         );
       });
        });
-  });
-  
-} else {
-
-  panels.forEach((panel, i) => {
-    const service = panel.querySelector(".what-we_services");
-    gsap.set(service, { x: window.innerWidth });
-    if (service) {
-      gsap.to(service, {
-      x: () => -(
-        service.scrollWidth - service.parentElement.offsetWidth
-      ),
-      duration: 10, 
-      ease: 'none',
-      scrollTrigger: {
-        trigger: panel,
-        start: 'top top',
-        toggleActions: 'play complete reverse reset', 
-        // markers: true,
-        id: `mobile-service-${i}`
-      }
-    });
-    }
-  });
+  })
 }
 
 
-
+if (isMobile != true) {
 //connect section
 const textWidth = document.querySelector(".connect_content").offsetWidth;
 
@@ -514,9 +587,9 @@ const adjustFooterOverlap = () => {
     end: () => "+=" + (getOverlap() + textWidth + windowWidth ),
     pin: true,
     markers: false,
-    onEnter: self => {
-        self.spacer.style.backgroundColor = "#140826";
-      },
+    // onEnter: self => {
+    //     self.spacer.style.backgroundColor = "#140826";
+    //   },
     //   onLeave: () => {
     //     const logo = document.querySelector(".connect_logo");
     //     const footer = document.querySelector(".footer");
@@ -547,7 +620,7 @@ const adjustFooterOverlap = () => {
 
 
 const initialLogoX = textWidth - window.innerWidth / 2 + 10;
-const revealOffset = window.innerHeight * 2.08; 
+// const revealOffset = window.innerHeight * 2.08; 
 // console.log('revealOffset:', revealOffset);
 
 gsap.set(".connect_logo", {
@@ -659,7 +732,7 @@ split.chars.forEach((char) => {
           containerAnimation: scrollText,
           start: "left 80%",
           end: "left 0%",
-          scrub: 0.5,
+          scrub: true,
           markers: false
         }
       }
@@ -717,7 +790,7 @@ function triggerLogoBurst() {
     }
   });
 }
-
+}
 
 window.addEventListener("load", () => {
   ScrollTrigger.refresh();

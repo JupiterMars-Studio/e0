@@ -107,21 +107,22 @@ const heroGrid = document.getElementById("hero-grid");
 
 for (let i = 0; i < rows * columns; i++) {
     const wrapper = document.createElement("div");
-wrapper.classList.add("hero-svg-wrapper");
+    wrapper.classList.add("hero-svg-wrapper");
     const iconWrapper = document.createElement("div");
     iconWrapper.classList.add("hero-svg-icon");
 
     const activeSpecialIndexes = isMobile ? specialMobileIndexes : specialIndexes;
     const isSpecial = activeSpecialIndexes.includes(i);
     if (isSpecial) iconWrapper.classList.add("special");
+    const labelIndex = activeSpecialIndexes.indexOf(i);
 
     iconWrapper.innerHTML = `
       <svg viewBox="0 0 10 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9.35 29.9971C3.89716 28.6535 2.33617 24.9387 2.33617 16.4973C2.33617 8.05596 3.90247 4.34112 9.35 2.99757V0H0V33H9.35V30.0024V29.9971Z" fill="#140826"/>
+        <path d="M9.35 29.9971C3.89716 28.6535 2.33617 24.9387 2.33617 16.4973C2.33617 8.05596 3.90247 4.34112 9.35 2.99757V0H0V33H9.35V30.0024V29.9971Z" fill="var(--color--hero-grid)"/>
       </svg>
-      ${isSpecial ? `<span class="expander">${texts[specialIndexes.indexOf(i)]}</span>` : ''}
+      ${isSpecial ? `<span class="expander">${texts[labelIndex]}</span>` : ''}
       <svg viewBox="0 0 10 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0.648438 0V2.99805C6.10128 4.34182 7.66227 8.05727 7.66227 16.5C7.66227 24.9427 6.10128 28.6582 0.648438 30.0019V33H9.99844V0H0.648438Z" fill="#140826"/>
+        <path d="M0.648438 0V2.99805C6.10128 4.34182 7.66227 8.05727 7.66227 16.5C7.66227 24.9427 6.10128 28.6582 0.648438 30.0019V33H9.99844V0H0.648438Z" fill="var(--color--hero-grid)"/>
       </svg>
     `;
 wrapper.appendChild(iconWrapper);
@@ -178,13 +179,14 @@ allLis.forEach((li, index) => {
   // Initial styles
   gsap.set(li, {
     //transformOrigin: "0 50%",
-    color: "#FFFCF5"
+    // color: "#140826"
   });
 
   if (!isFirst) {
     gsap.set(li, {
       opacity: 0.2,
-		x: -50
+          // color: "#FFFCF5",
+		      x: -50
     });
 	  
 	  const time = (index - 1) * staggerDelay;
@@ -192,12 +194,12 @@ allLis.forEach((li, index) => {
     // Animate in
     tlHows.to(li, {
       opacity: 1,
-		color: color,
+		// color: color,
 		x: 0
     }, time); // simulate stagger
 	  
 	  tlHows.to(heading, {
-      color: color
+      // color: color
     }, time);
   }
 
@@ -205,7 +207,7 @@ allLis.forEach((li, index) => {
   if (!isLast) {
     tlHows.to(li, {
       opacity: 0.2,
-		 color: "#FFFCF5",
+		//  color: "#FFFCF5",
 		 x: -100
     }, index * 0.5); 
   }
@@ -242,8 +244,15 @@ document.querySelectorAll('.our-result').forEach(caseEl => {
     const content = acc.querySelector('.our-result_accordion-content');
     if (!content) return;
 
+  
     if (expand) {
       acc.classList.add('expanded');
+
+      content.style.transition = 'none';
+      content.style.maxHeight = '0px';
+      content.offsetHeight;
+      content.style.transition = 'max-height 0.3s ease, padding-top 0.3s ease';
+
       content.style.maxHeight = content.scrollHeight + "px";
     } else {
       acc.classList.remove('expanded');
@@ -675,8 +684,7 @@ const postScrollLogoAnim = gsap.timeline({
       })
 
       .to(".connect_logo", {
-
-          top: isMobile ? "25%" : "16%",
+          top: isMobile ? "25%" : "18%",
           ease: "none",
           duration: 1.5
         }, "<+1")
@@ -694,7 +702,7 @@ const postScrollLogoAnim = gsap.timeline({
   .to(".connect_form-wrapper", { opacity: 1, marginTop: "20vh", ease: "power2.out", duration: 0.4 }, "<")
 .to(".connect_form", { height: "max-content", display: "flex", ease: "power2.out", paddingBottom: "0px", duration: 0.4, delay: 0.1 }, "<")
 .to(".footer-wrapper", {
-    height: "60vh",
+    height: "68vh",
     ease: "power2.out",
     duration: 0.5
   }, "<")
@@ -743,7 +751,6 @@ split.chars.forEach((char) => {
 
 
 let hasBurstRun = false; // flag to prevent re-running
-
 function triggerLogoBurst() {
   if (hasBurstRun) return;
   hasBurstRun = true;
@@ -759,6 +766,7 @@ function triggerLogoBurst() {
 
   const bg = document.getElementById("explotionBackground");
   let logos = [];
+  
 
   for (let i = 0; i < 80; i++) {
     const wrapper = document.createElement("div");
@@ -769,7 +777,7 @@ function triggerLogoBurst() {
   }
 
   gsap.set(logos, {
-    scale: "random(0.5, 1)",
+    scale: "1",
     x: 100,
     y: 100,
     rotation: "random(0, 360)"
@@ -782,15 +790,55 @@ function triggerLogoBurst() {
       angle: "random(250, 290)",
       gravity: 500
     },
+  //   onUpdate: function () {
+  //     logos.forEach((logo) => {
+  //       const bounds = logo.getBoundingClientRect();
+  //       console.log(bounds);
+  //       const floor = 500;
+
+  //       if (!logo.landed && bounds.top > floor) {
+  //         logo.landed = true;
+
+  //         // Stop physics motion, but don't snap
+  //         gsap.killTweensOf(logo);
+
+  //         const currentX = logo._gsap.x;
+  //         const currentY = logo._gsap.y;
+
+  //         // Ease into the final "landed" position
+  //         gsap.to(logo, {
+  //           x: currentX,
+  //           y: floor - bounds.height,
+  //           rotation: "+=10", // small natural rotation
+  //           ease: "power2.out",
+  //           duration: 0.5
+  //         });
+  //       }
+  //     });
+  // },
     onComplete: () => {
       // Clean up logos after burst
       logos.forEach(logo => logo.remove());
       explotionAnimation.style.display = "none";
       hasBurstRun = false; 
+      
     }
   });
 }
 }
+
+ScrollTrigger.create({
+  trigger: ".section_footer", // or your actual trigger element
+  start: "top bottom",
+  end: "bottom bottom",
+  onLeaveBack: () => {
+    logos.forEach((logo) => logo.remove());
+    const explotionAnimation = document.getElementById("explotionAnimation");
+    if (explotionAnimation) explotionAnimation.style.display = "none";
+    hasBurstRun = false;
+  }
+});
+
 
 window.addEventListener("load", () => {
   ScrollTrigger.refresh();

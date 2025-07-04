@@ -34,6 +34,17 @@ document.fonts.ready.then(() => {
         stagger: 0.3,
       })
 
+      .to(quote.querySelectorAll("span"), {
+        color: "var(--swatch--photon)",
+        opacity: 1,
+        duration: 0.3
+      })
+
+    .to(lines, {
+        color: "var(--swatch--grey)",
+        duration: 0.3,
+      }, "<")
+
       .to(lines, {
         yPercent: -100,
         opacity: 0,
@@ -46,67 +57,6 @@ document.fonts.ready.then(() => {
     founderDesc.add(founderDescTl);
   });
 
-  let visionTop = SplitText.create(".about-vision_content-top", {
-    type: "chars, words",
-  });
-  let visionBottom = SplitText.create(".about-vision_content-bottom", {
-    type: "chars, words",
-  });
-
-  let visionTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".section_about-vision",
-      start: "top top",
-      end: "bottom+=100% top",
-      scrub: true,
-      markers: false,
-      pin: true,
-    },
-  });
-
-  visionTimeline
-    .from(visionTop.chars, {
-      y: -100,
-      rotation: -20,
-      autoAlpha: 0,
-      stagger: {
-        each: 0.05,
-      },
-      ease: "circ.out",
-    })
-
-    .from(
-      visionBottom.chars,
-      {
-        y: 100,
-        rotation: 20,
-        autoAlpha: 0,
-        stagger: {
-          each: 0.05,
-        },
-        ease: "circ.out",
-      },
-      "<"
-    );
-
-  document.querySelectorAll(".about-reveal").forEach((el) => {
-    let split = SplitText.create(el, { type: "chars, words" });
-
-    gsap.from(split.chars, {
-      scrollTrigger: {
-        trigger: el,
-        start: "top-=400 top",
-        end: "+=200",
-        scrub: true,
-        markers: false,
-      },
-      autoAlpha: 0.5,
-      color: "#DFDDD7",
-      stagger: {
-        each: 0.05,
-      },
-    });
-  });
 
   const movingImg = document.querySelector(".founder-image");
   const moveHere = document.querySelector(".goal-move-here");
@@ -154,8 +104,10 @@ document.fonts.ready.then(() => {
     ease: "power2.in",
   });
   tl.from(".icons-goal", { autoAlpha: 0 }, "<");
-});
 
+
+
+//about-name section
 gsap.set(".name_text-one", { autoAlpha: 0 });
 gsap.set(".name_text-two", { autoAlpha: 0 });
 gsap.set(".about-name_right", { yPercent: 50 });
@@ -164,10 +116,10 @@ const nameTl = gsap.timeline({
   scrollTrigger: {
     trigger: ".section_about-name",
     start: "top top",
-    end: "bottom+=100% top",
+    end: "+=100%",
     scrub: true,
     pin: true,
-    markers: true,
+    markers: false,
   },
 });
 nameTl
@@ -247,3 +199,83 @@ nameTl
     { color: "var(--color--text)", duration: 0.5, ease: "none" },
     "<"
   );
+
+
+  //vision section
+    let visionTop = SplitText.create(".about-vision_content-top", {
+    type: "chars, words",
+  });
+  let visionBottom = SplitText.create(".about-vision_content-bottom", {
+    type: "chars, words",
+  });
+
+  let visionTimeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".section_about-vision",
+      start: "top top",
+      end: "bottom+=100% top",
+      scrub: true,
+      markers: false,
+      pin: true,
+    },
+  });
+
+  visionTimeline
+    .from(visionTop.chars, {
+      y: -100,
+      rotation: -20,
+      autoAlpha: 0,
+      stagger: {
+        each: 0.05,
+      },
+      ease: "circ.out",
+    })
+
+    .from(
+      visionBottom.chars,
+      {
+        y: 100,
+        rotation: 20,
+        autoAlpha: 0,
+        stagger: {
+          each: 0.05,
+        },
+        ease: "circ.out",
+      },
+      "<"
+    );
+
+
+    //text-reveal
+    document.querySelectorAll(".about-reveal").forEach((el) => {
+    let split = SplitText.create(el, { type: "lines, chars, words" });
+
+    const revealTl = gsap.timeline ({
+      scrollTrigger: {
+        trigger: el,
+        start: "top-=400 top",
+        end: "+=300",
+        scrub: true,
+        markers: false,
+      },
+    });
+
+    revealTl.from(split.chars, {
+      autoAlpha: 0.5,
+      color: "#DFDDD7",
+      stagger: {
+        each: 0.05,
+      },
+    })
+    .to(split.chars, {
+    //   autoAlpha: 0.5,
+      color: "#DFDDD7",
+     stagger: {
+        each: 0.05,
+      },
+      delay: 1
+    });
+  });
+
+});
+

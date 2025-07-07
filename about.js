@@ -1,5 +1,5 @@
 gsap.registerPlugin(Flip, SplitText, ScrollTrigger);
-
+const isMobile = window.innerWidth <= 768; 
 document.fonts.ready.then(() => {
   const quotes = document.querySelectorAll(".founder-desc");
   const founderDesc = gsap.timeline({
@@ -123,7 +123,7 @@ const nameTl = gsap.timeline({
   },
 });
 nameTl
-  .to(".about-name_right", { yPercent: 18, duration: 1, ease: "none" })
+  .to(".about-name_right", { yPercent: isMobile ? 9: 18, duration: 1, ease: "none" })
   .to(
     ".name_text-one",
     { autoAlpha: 1, duration: 1, delay: 0.5, ease: "none" },
@@ -149,7 +149,7 @@ nameTl
     "<"
   )
   .to(".mask_one", { top: "50%", ease: "none", duration: 1.1 }, "<")
-  .to(".about-name_right", { yPercent: -8, duration: 1, ease: "none" }, "<")
+  .to(".about-name_right", { yPercent: isMobile ? -21 : -8, duration: 1, ease: "none" }, "<")
   .to(
     ".about-name_desc:nth-child(1)",
     { autoAlpha: 0, duration: 0.5, delay: 0.5 },
@@ -162,7 +162,7 @@ nameTl
   )
   .set("#maskRectLeft", { attr: { y: 300 } })
   .set("#maskRectRight", { attr: { y: 300 } })
-  .to(".about-name_right", { yPercent: -38, duration: 1, ease: "none" })
+  .to(".about-name_right", { yPercent: isMobile ? -52 : -38, duration: 1, ease: "none" })
   .to(
     "#maskRectLeft",
     {
@@ -187,7 +187,7 @@ nameTl
     duration: 1.5,
     ease: "none",
   })
-  .to(".about-name_right", { yPercent: -68, duration: 1, ease: "none" }, "<")
+  .to(".about-name_right", { yPercent: isMobile ? -79 : -68, duration: 1, ease: "none" }, "<")
   .to(".mask_one", { top: "0%", ease: "none", duration: 1, delay: 0.5 }, "<")
   .to(
     ".about-name_desc:nth-child(3)",

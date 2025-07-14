@@ -1,0 +1,43 @@
+
+
+.blog-content_list{
+    height: max-content;
+}
+
+.blog-content_heading-list ul{
+    padding-left: 0;
+}
+
+.blog-content_heading-list li{
+    margin-bottom: 28px;
+}
+
+.blog-content_heading-list li::marker{
+    content: "";
+}
+
+.blog-content_heading-list a{
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.3s ease;    
+}
+
+.blog-content_heading-list li.active a{
+    color: var(--swatch--laser);    
+}
+
+#fixed-nav ul li {
+  position: relative;
+  padding-left: 0px; /* reserve space for icon */
+}
+
+#fixed-nav ul li.active {
+    padding-left: 30px;
+}
+
+#fixed-nav ul li .active-icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}

@@ -100,6 +100,7 @@ const tl = gsap.timeline()
 const heroGrid = document.getElementById("hero-grid");
   const specialIndexes = [368, 394, 476, 500];
   const specialMobileIndexes = [180, 196, 160, 166];
+  const specialColor = ["quaternary-color", "plasma-fluor", "laser-fluor", "secondary-background"]
   const texts = ["B2B Design", "B2B MARKETING DESIGN", "B2B Design Ops", "B2B Branding"];
 
   const rows = isMobile ? 19 : 18;
@@ -118,11 +119,11 @@ for (let i = 0; i < rows * columns; i++) {
 
     iconWrapper.innerHTML = `
       <svg viewBox="0 0 10 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9.35 29.9971C3.89716 28.6535 2.33617 24.9387 2.33617 16.4973C2.33617 8.05596 3.90247 4.34112 9.35 2.99757V0H0V33H9.35V30.0024V29.9971Z" fill="var(--color--hero-grid)"/>
+        <path d="M9.35 29.9971C3.89716 28.6535 2.33617 24.9387 2.33617 16.4973C2.33617 8.05596 3.90247 4.34112 9.35 2.99757V0H0V33H9.35V30.0024V29.9971Z" fill="${isSpecial ? `var(--color--${specialColor[labelIndex]})` : 'var(--color--hero-grid)'}"/>
       </svg>
       ${isSpecial ? `<span class="expander">${texts[labelIndex]}</span>` : ''}
       <svg viewBox="0 0 10 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0.648438 0V2.99805C6.10128 4.34182 7.66227 8.05727 7.66227 16.5C7.66227 24.9427 6.10128 28.6582 0.648438 30.0019V33H9.99844V0H0.648438Z" fill="var(--color--hero-grid)"/>
+        <path d="M0.648438 0V2.99805C6.10128 4.34182 7.66227 8.05727 7.66227 16.5C7.66227 24.9427 6.10128 28.6582 0.648438 30.0019V33H9.99844V0H0.648438Z" fill="${isSpecial ? `var(--color--${specialColor[labelIndex]})` : 'var(--color--hero-grid)'}"/>
       </svg>
     `;
 wrapper.appendChild(iconWrapper);

@@ -1,10 +1,11 @@
 
 const hasVisited = localStorage.getItem('hasVisitedLoader');
-if (hasVisited) {
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 const windowWidth = window.innerWidth;
 const isMobile = window.innerWidth <= 768; 
+
+if (hasVisited) {
 //loader
 gsap.set(".loader", { opacity: 1, display: "flex" });
 const wrapper = document.querySelector('.svg-wrapper');
@@ -335,7 +336,7 @@ document.querySelectorAll('.what-we_services').forEach(itemsContainer => {
   if (isMobile != true) {
     itemsContainer.style.position = 'relative';
     itemsContainer.style.width = `${areaWidth}px`;
-    itemsContainer.style.height = `${areaHeight}px`;
+    itemsContainer.style.height = `100%`;
 
     items.forEach(item => {
       let placed = false;

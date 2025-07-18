@@ -1,11 +1,10 @@
 
-const hasVisited = localStorage.getItem('hasVisitedLoader');
-
 gsap.registerPlugin(ScrollTrigger, SplitText);
 const windowWidth = window.innerWidth;
 const isMobile = window.innerWidth <= 768; 
 
-if (hasVisited) {
+if (!localStorage.getItem("loaderPlayed")) {
+   localStorage.setItem("loaderPlayed", "true");
 //loader
 gsap.set(".loader", { opacity: 1, display: "flex" });
 const wrapper = document.querySelector('.svg-wrapper');
@@ -94,6 +93,13 @@ const tl = gsap.timeline()
   .to(".bracket-end-nav", {display: "none", duration: 0, ease: "none"})
   .to(".hero-grid", {opacity: 1, duration: 1, ease: "none"})
   .to(".loader", {display: "none"})
+} else{
+    gsap.set(".section_home-header", { y: 0 });
+    gsap.set(".section_scrolling-logo", { y: 0 });
+    gsap.set(".navbar", { opacity: 1 });
+    gsap.set(".hero-grid", { opacity: 1 });
+    gsap.set(".link-hover-line", { opacity: 1 });
+    gsap.set(".loader", { display: "none" });
 }
 
 

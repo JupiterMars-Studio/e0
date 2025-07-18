@@ -1,4 +1,6 @@
 
+const hasVisited = localStorage.getItem('hasVisitedLoader');
+if (hasVisited) {
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 const windowWidth = window.innerWidth;
@@ -91,8 +93,7 @@ const tl = gsap.timeline()
   .to(".bracket-end-nav", {display: "none", duration: 0, ease: "none"})
   .to(".hero-grid", {opacity: 1, duration: 1, ease: "none"})
   .to(".loader", {display: "none"})
-
-
+}
 
 
 

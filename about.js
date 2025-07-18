@@ -1,20 +1,22 @@
 gsap.registerPlugin(Flip, SplitText, ScrollTrigger);
 const isMobile = window.innerWidth <= 768; 
 document.fonts.ready.then(() => {
+    
   const quotes = document.querySelectorAll(".founder-desc");
   const founderDesc = gsap.timeline({
     scrollTrigger: {
       trigger: ".section_about-founders",
       start: "top top",
-      end: "bottom+=100% top",
+      end: "bottom+=150% top",
       scrub: true,
       pin: true,
       markers: false,
       id: "founderPin",
     },
   });
-
+  
   quotes.forEach((quote) => {
+    if (!quote) return; 
     const split = new SplitText(quote, {
       type: "lines,words",
       linesClass: "line",
@@ -29,7 +31,7 @@ document.fonts.ready.then(() => {
       .from(lines, {
         yPercent: 100,
         opacity: 0,
-        duration: 1.5,
+        duration: 2,
         ease: "power2.out",
         stagger: 0.3,
       })
@@ -37,12 +39,12 @@ document.fonts.ready.then(() => {
       .to(quote.querySelectorAll("span"), {
         color: "var(--swatch--photon)",
         opacity: 1,
-        duration: 0.3
+        duration: 1
       })
 
     .to(lines, {
         color: "var(--swatch--grey)",
-        duration: 0.3,
+        duration: 1,
       }, "<")
 
       .to(lines, {
@@ -50,8 +52,8 @@ document.fonts.ready.then(() => {
         opacity: 0,
         duration: 1.5,
         ease: "power2.in",
-        stagger: 0.3,
-        delay: 0.3,
+        stagger: 0.5,
+        delay: 1,
       });
 
     founderDesc.add(founderDescTl);
@@ -62,6 +64,7 @@ document.fonts.ready.then(() => {
   const moveHere = document.querySelector(".goal-move-here");
   const beforeSection = document.querySelector(".section_about-founders");
 
+  if (movingImg && moveHere && beforeSection) {
   ScrollTrigger.create({
     trigger: ".section_about-founders",
     start: "bottom+=100 bottom",
@@ -86,6 +89,7 @@ document.fonts.ready.then(() => {
       });
     },
   });
+}
 
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -200,6 +204,10 @@ nameTl
     "<"
   );
 
+  
+
+  
+
 
   //vision section
     let visionTop = SplitText.create(".about-vision_content-top", {
@@ -276,6 +284,7 @@ nameTl
       delay: 1
     });
   });
+
 
 });
 

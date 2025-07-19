@@ -94,12 +94,12 @@ const tl = gsap.timeline()
   .to(".hero-grid", {opacity: 1, duration: 1, ease: "none"})
   .to(".loader", {display: "none"})
 } else{
-    gsap.set(".section_home-header", { y: 0 });
-    gsap.set(".section_scrolling-logo", { y: 0 });
-    gsap.set(".navbar", { opacity: 1 });
-    gsap.set(".hero-grid", { opacity: 1 });
-    gsap.set(".link-hover-line", { opacity: 1 });
-    gsap.set(".loader", { display: "none" });
+      gsap.from(".heading-hero", { y: 100, duration: 0.5, autoAlpha: 0, ease: "power1.in" });
+      gsap.from(".hero-description", { y: 100, duration: 0.5, autoAlpha: 0, ease: "power1.in" }, "<");
+    gsap.from(".section_scrolling-logo", { y: 100, duration: 0.5, ease: "power1.in" });
+    gsap.from(".navbar", { duration: 0.5, autoAlpha: 0, ease: "power1.in" });
+    gsap.from(".hero-grid", { opacity: 0, duration: 1, ease: "power1.in" });
+    // gsap.set(".loader", { display: "none" });
 }
 
 
@@ -195,7 +195,7 @@ allLis.forEach((li, index) => {
     gsap.set(li, {
       opacity: 0.2,
           // color: "#FFFCF5",
-		      x: -50
+		      x: isMobile ? -10 : -50
     });
 	  
 	  const time = (index - 1) * staggerDelay;
@@ -227,7 +227,7 @@ ScrollTrigger.create({
   start: "center center",
   endTrigger: ".text_how-we:last-of-type",
   end: "center center",
-  pin: true,
+  pin: isMobile ? false : true,
   markers: false,
   animation: tlHows,
   scrub: true
@@ -658,7 +658,7 @@ const scrollText = gsap.timeline({
     start: "top top",
     end: `+=${textWidth + windowWidth}`,
     scrub: true,
-    pin: true,
+    pin: isMobile ? false : true,
     markers: false
   }
 })

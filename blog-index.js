@@ -62,7 +62,7 @@
         const targetElement = document.getElementById(targetId);
 
         // Offset if you have a fixed header
-        const headerOffset = document.querySelector('header') ? document.querySelector('header').offsetHeight : 0;
+        const headerOffset = document.querySelector('nav') ? document.querySelector('nav').offsetHeight : 0;
 
 
         const elementPosition = targetElement.getBoundingClientRect().top;
@@ -77,7 +77,7 @@
     });
 
 window.addEventListener('scroll', function () {
-  const headerOffset = document.querySelector('header')?.offsetHeight || 0;
+  const headerOffset = document.querySelector('nav')?.offsetHeight || 0;
   const triggerLine = headerOffset + 10;
   let current = '';
 

@@ -217,7 +217,7 @@ allLis.forEach((li, index) => {
     tlHows.to(li, {
       opacity: 0.2,
 		//  color: "#FFFCF5",
-		 x: -100
+		 x: isMobile ? -10 : -100
     }, index * 0.5); 
   }
 });
@@ -344,56 +344,56 @@ document.querySelectorAll('.what-we_services').forEach(itemsContainer => {
     itemsContainer.style.width = `${areaWidth}px`;
     itemsContainer.style.height = `100%`;
 
-    items.forEach(item => {
-      let placed = false;
-      let attempts = 0;
+    // items.forEach(item => {
+    //   let placed = false;
+    //   let attempts = 0;
 
-      while (!placed && attempts < 300) {
-        const left = Math.random() * (areaWidth - itemWidth);
-        const top = Math.random() * (areaHeight - itemHeight);
+    //   while (!placed && attempts < 300) {
+    //     const left = Math.random() * (areaWidth - itemWidth);
+    //     const top = Math.random() * (areaHeight - itemHeight);
 
-        const newRect = {
-          left,
-          top,
-          right: left + itemWidth,
-          bottom: top + itemHeight
-        };
+    //     const newRect = {
+    //       left,
+    //       top,
+    //       right: left + itemWidth,
+    //       bottom: top + itemHeight
+    //     };
 
-        const overlapping = placedRects.some(rect =>
-          isOverlapping(rect, newRect, padding)
-        );
+    //     const overlapping = placedRects.some(rect =>
+    //       isOverlapping(rect, newRect, padding)
+    //     );
 
-        if (!overlapping) {
-          item.style.position = 'absolute';
-          item.style.left = `${left}px`;
-          item.style.top = `${top}px`;
-          placedRects.push(newRect);
-          placed = true;
-        }
+    //     if (!overlapping) {
+    //       item.style.position = 'absolute';
+    //       item.style.left = `${left}px`;
+    //       item.style.top = `${top}px`;
+    //       placedRects.push(newRect);
+    //       placed = true;
+    //     }
 
-        attempts++;
-      }
+    //     attempts++;
+    //   }
 
-      if (!placed) {
-        console.warn("Could not place item without overlap");
-      }
-    });
+    //   if (!placed) {
+    //     console.warn("Could not place item without overlap");
+    //   }
+    // });
   } else {
-    items.forEach(item => {
-        const maxMarginLeft = window.innerWidth - item.offsetWidth;
-        const randomMarginLeft = Math.random() * maxMarginLeft;
-        item.style.marginLeft = `${randomMarginLeft}px`;
-      });
+    // items.forEach(item => {
+    //     const maxMarginLeft = window.innerWidth - item.offsetWidth;
+    //     const randomMarginLeft = Math.random() * maxMarginLeft;
+    //     item.style.marginLeft = `${randomMarginLeft}px`;
+    //   });
   }
 
-  function isOverlapping(a, b, padding = 20) {
-    return !(
-      a.right + padding < b.left ||
-      a.left - padding > b.right ||
-      a.bottom + padding < b.top ||
-      a.top - padding > b.bottom
-    );
-  }
+  // function isOverlapping(a, b, padding = 20) {
+  //   return !(
+  //     a.right + padding < b.left ||
+  //     a.left - padding > b.right ||
+  //     a.bottom + padding < b.top ||
+  //     a.top - padding > b.bottom
+  //   );
+  // }
 });
 
   

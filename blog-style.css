@@ -22,8 +22,16 @@
     transition: color 0.3s ease;    
 }
 
-.blog-content_heading-list li.active a{
+.blog-content_heading-list li:nth-child(3n+1).active, .blog-content_heading-list li:nth-child(3n+1).active a{
     color: var(--swatch--laser);    
+}
+
+.blog-content_heading-list li:nth-child(3n+2).active, .blog-content_heading-list li:nth-child(3n+2).active a{
+    color: var(--swatch--plasma);    
+}
+
+.blog-content_heading-list li:nth-child(3n+3).active, .blog-content_heading-list li:nth-child(3n+3).active a{
+    color: var(--swatch--electron);    
 }
 
 #fixed-nav ul li {

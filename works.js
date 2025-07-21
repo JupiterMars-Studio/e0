@@ -2,6 +2,7 @@ if (window.innerWidth > 1024) {
 document.querySelectorAll(".work-img").forEach((container) => {
   const hover = container.querySelector(".work-hover");
   const maskLayer = container.querySelector(".mask-layer");
+  const workItem = container.closest(".work-item");
 
   container.style.position = "relative";
   hover.style.position = "absolute";
@@ -36,12 +37,12 @@ document.querySelectorAll(".work-img").forEach((container) => {
     maskLayer.style.webkitMaskPosition = pos;
   });
 
-  container.addEventListener("mouseenter", () => {
+  workItem.addEventListener("mouseenter", () => {
     gsap.to(hover, { opacity: 1, duration: 0.3, scale: 1 });
     gsap.to(maskLayer, { opacity: 1, duration: 0.3, delay: 0.5, ease: "none" });
   });
 
-  container.addEventListener("mouseleave", () => {
+  workItem.addEventListener("mouseleave", () => {
     gsap.to(hover, { opacity: 0, duration: 0.3, scale: 0 });
     gsap.to(maskLayer, { opacity: 0, duration: 0.3 });
   });

@@ -204,6 +204,46 @@ nameTl
     "<"
   );
 
+
+ScrollTrigger.create({
+  trigger: ".section_about-model",
+  start: "top top",
+  end: "bottom+=100% top",
+  pin: true,
+  scrub: true,
+  markers: false
+});
+
+ document.querySelectorAll(".accordion-item").forEach((el) => {
+  const icon = el.querySelector(".accordion-item-icon-bottom");
+
+  gsap.to(el, {
+    scrollTrigger: {
+      trigger: el,
+      start: "top-=300 top",
+      end: "+=150",
+      scrub: 0.5,
+      markers: false
+    },
+    height: "auto",
+    duration: 0.5,
+    ease: "power2.out"
+  });
+
+  if (icon) {
+    gsap.to(icon, {
+      scrollTrigger: {
+        trigger: el,
+        start: "top-=300 top",
+        end: "+=150",
+        scrub: 0.5
+      },
+      top: "80%",
+      ease: "power2.out"
+    });
+  }
+});
+
   
 
   
@@ -222,7 +262,7 @@ nameTl
       trigger: ".section_about-vision",
       start: "top top",
       end: "bottom+=100% top",
-      scrub: true,
+      scrub: 0.5,
       markers: false,
       pin: true,
     },
@@ -284,6 +324,9 @@ nameTl
       delay: 1
     });
   });
+
+
+
 
 
 });

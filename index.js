@@ -93,12 +93,16 @@ const tl = gsap.timeline()
   .to(".bracket-end-nav", {display: "none", duration: 0, ease: "none"})
   .to(".hero-grid", {opacity: 1, duration: 1, ease: "none"})
   .to(".loader", {display: "none"})
+  .to({}, { duration: 0, onComplete: runAutoExpandIcons });
+
 } else{
       gsap.from(".heading-hero", { y: 100, duration: 0.5, autoAlpha: 0, ease: "power1.in" });
       gsap.from(".hero-description", { y: 100, duration: 0.5, autoAlpha: 0, ease: "power1.in" }, "<");
     gsap.from(".section_scrolling-logo", { y: 100, duration: 0.5, ease: "power1.in" });
     gsap.from(".navbar", { duration: 0.5, autoAlpha: 0, ease: "power1.in" });
     gsap.from(".hero-grid", { opacity: 0, duration: 1, ease: "power1.in" });
+  setTimeout(runAutoExpandIcons, 600);
+
     // gsap.set(".loader", { display: "none" });
 }
 
@@ -107,7 +111,7 @@ const tl = gsap.timeline()
 //hero
 const heroGrid = document.getElementById("hero-grid");
   const specialIndexes = [368, 394, 476, 500];
-  const specialMobileIndexes = [180, 196, 160, 166];
+  const specialMobileIndexes = [184, 191, 160, 168];
   const specialColor = ["quaternary-color", "plasma-fluor", "laser-fluor", "secondary-background"]
   const texts = ["B2B Design", "B2B MARKETING DESIGN", "B2B Design Ops", "B2B Branding"];
 
@@ -139,20 +143,39 @@ wrapper.appendChild(iconWrapper);
   }
 
 
-document.querySelectorAll('.hero-svg-icon.special').forEach(icon => {
-    const leftSVG = icon.querySelector('svg:first-of-type');
-    const rightSVG = icon.querySelector('svg:last-of-type');
-    const expander = icon.querySelector('.expander');
+function runAutoExpandIcons() {
+document.querySelectorAll('.hero-svg-icon.special').forEach((icon, index) => {
+  const leftSVG = icon.querySelector('svg:first-of-type');
+  const rightSVG = icon.querySelector('svg:last-of-type');
+  const expander = icon.querySelector('.expander');
 
-    // Set initial state
-    gsap.set(expander, { width: 0, opacity: 0 });
+  const isTouch = window.matchMedia("(max-width: 1024px)").matches; // Tablet & Mobile
 
+  gsap.set(expander, { width: 0, opacity: 0 });
+
+  if (isTouch) {
+    setTimeout(() => {
+      gsap.to(leftSVG, { x: -6, duration: 0.3, ease: "power2.out" });
+      gsap.to(rightSVG, { x: 6, duration: 0.3, ease: "power2.out" });
+      gsap.to(icon, {background: "var(--color--background)", zIndex: 2, width: "auto", duration: 0.3, ease: "power2.out" });
+
+      gsap.to(expander, {
+        width: "auto",
+        opacity: 1,
+        duration: 0.3,
+        display: "flex",
+        ease: "power2.out",
+        onUpdate: () => {
+          expander.style.width = expander.scrollWidth + "px";
+        }
+      });
+    }, index * 1000); // Customize delay per icon (1s between)
+  } else {
+    // Desktop hover animation
     icon.addEventListener('mouseenter', () => {
-      // Animate SVGs apart
       gsap.to(leftSVG, { x: -6, duration: 0.3, ease: "power2.out" });
       gsap.to(rightSVG, { x: 6, duration: 0.3, ease: "power2.out" });
 
-      // Expand text
       gsap.to(expander, {
         width: "auto",
         opacity: 1,
@@ -169,7 +192,9 @@ document.querySelectorAll('.hero-svg-icon.special').forEach(icon => {
       gsap.to(rightSVG, { x: 0, duration: 0.5 });
       gsap.to(expander, { width: 0, opacity: 0, duration: 0.5 });
     });
-  });
+  }
+});
+}
   
   
   //how we do

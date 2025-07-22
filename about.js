@@ -94,7 +94,7 @@ document.fonts.ready.then(() => {
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: ".section_about-goal",
-      start: "top top",
+      start: "top-=150 top",
       end: "+=100",
       markers: false,
       scrub: true,
@@ -205,14 +205,27 @@ nameTl
   );
 
 
-ScrollTrigger.create({
-  trigger: ".section_about-model",
-  start: "top top",
-  end: "bottom+=100% top",
-  pin: true,
-  scrub: true,
-  markers: false
-});
+// ScrollTrigger.create({
+//   trigger: ".section_about-model",
+//   start: "top top",
+//   end: "bottom+=100% bottom",
+//   pin: false,
+//   scrub: true,
+//   markers: false
+// });
+
+function debounce(func, delay) {
+  let timer;
+  return function () {
+    clearTimeout(timer);
+    timer = setTimeout(func, delay);
+  };
+}
+
+// 2. Debounced ScrollTrigger.refresh()
+const debouncedRefresh = debounce(() => {
+  ScrollTrigger.refresh();
+}, 200);
 
  document.querySelectorAll(".accordion-item").forEach((el) => {
   const icon = el.querySelector(".accordion-item-icon-bottom");
@@ -223,7 +236,8 @@ ScrollTrigger.create({
       start: "top-=300 top",
       end: "+=150",
       scrub: 0.5,
-      markers: false
+      markers: false,
+      onUpdate: debouncedRefresh
     },
     height: "auto",
     duration: 0.5,
@@ -236,7 +250,8 @@ ScrollTrigger.create({
         trigger: el,
         start: "top-=300 top",
         end: "+=150",
-        scrub: 0.5
+        scrub: 0.5,
+        onUpdate: debouncedRefresh
       },
       top: "80%",
       ease: "power2.out"

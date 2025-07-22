@@ -7,7 +7,7 @@ document.fonts.ready.then(() => {
     scrollTrigger: {
       trigger: ".section_about-founders",
       start: "top top",
-      end: "bottom+=150% top",
+      end: "bottom+=200% top",
       scrub: true,
       pin: true,
       markers: false,

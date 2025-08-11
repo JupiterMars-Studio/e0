@@ -1,8 +1,11 @@
 gsap.registerPlugin(Flip, SplitText, ScrollTrigger);
-const isMobile = window.innerWidth <= 768; 
+
+const mm = gsap.matchMedia();
 document.fonts.ready.then(() => {
     
   const quotes = document.querySelectorAll(".founder-desc");
+
+
   const founderDesc = gsap.timeline({
     scrollTrigger: {
       trigger: ".section_about-founders",
@@ -58,6 +61,7 @@ document.fonts.ready.then(() => {
 
     founderDesc.add(founderDescTl);
   });
+  
 
 
   const movingImg = document.querySelector(".founder-image");
@@ -102,11 +106,7 @@ document.fonts.ready.then(() => {
     },
   });
 
-  tl.to(movingImg, {
-    clipPath: "inset(0% 0% 100% 0%)",
-    duration: 0.5,
-    ease: "power2.in",
-  });
+  tl.to(movingImg, {clipPath: "inset(0% 0% 100% 0%)", duration: 0.5, ease: "power2.in"});
   tl.from(".icons-goal", { autoAlpha: 0 }, "<");
 
 
@@ -116,7 +116,9 @@ gsap.set(".name_text-one", { autoAlpha: 0 });
 gsap.set(".name_text-two", { autoAlpha: 0 });
 gsap.set(".about-name_right", { yPercent: 50 });
 gsap.set(".about-name_desc", { color: "#DFDDD7" });
-const nameTl = gsap.timeline({
+
+mm.add("(min-width: 769px)", () => {
+    const nameTl = gsap.timeline({
   scrollTrigger: {
     trigger: ".section_about-name",
     start: "top top",
@@ -127,82 +129,61 @@ const nameTl = gsap.timeline({
   },
 });
 nameTl
-  .to(".about-name_right", { yPercent: isMobile ? 9: 18, duration: 1, ease: "none" })
-  .to(
-    ".name_text-one",
-    { autoAlpha: 1, duration: 1, delay: 0.5, ease: "none" },
-    "<"
-  )
-  .to(
-    ".about-name_desc:nth-child(1)",
-    { color: "var(--color--text)", duration: 0.5, ease: "none" },
-    "<"
-  )
-  .to("#maskRectLeft", {
-    attr: { y: -300 },
-    duration: 1.5,
-    ease: "none",
-  })
-  .to(
-    "#maskRectRight",
-    {
-      attr: { y: -300 },
-      duration: 1.5,
-      ease: "none",
-    },
-    "<"
-  )
+  .to(".about-name_right", { yPercent: 18, duration: 1, ease: "none" })
+  .to(".name_text-one", { autoAlpha: 1, duration: 1, delay: 0.5, ease: "none" }, "<")
+  .to(".about-name_desc:nth-child(1)", { color: "var(--color--text)", duration: 0.5, ease: "none" }, "<")
+  .to("#maskRectLeft", {attr: { y: -300 }, duration: 1.5, ease: "none" })
+  .to("#maskRectRight", { attr: { y: -300 }, duration: 1.5, ease: "none", }, "<")
   .to(".mask_one", { top: "50%", ease: "none", duration: 1.1 }, "<")
-  .to(".about-name_right", { yPercent: isMobile ? -21 : -8, duration: 1, ease: "none" }, "<")
-  .to(
-    ".about-name_desc:nth-child(1)",
-    { autoAlpha: 0, duration: 0.5, delay: 0.5 },
-    "<"
-  )
-  .to(
-    ".about-name_desc:nth-child(2)",
-    { color: "var(--color--text)", duration: 0.5, ease: "none" },
-    "<"
-  )
+  .to(".about-name_right", { yPercent: -8, duration: 1, ease: "none" }, "<")
+  .to(".about-name_desc:nth-child(1)", { autoAlpha: 0, duration: 0.5, delay: 0.5 }, "<")
+  .to(".about-name_desc:nth-child(2)", { color: "var(--color--text)", duration: 0.5, ease: "none" }, "<")
   .set("#maskRectLeft", { attr: { y: 300 } })
   .set("#maskRectRight", { attr: { y: 300 } })
-  .to(".about-name_right", { yPercent: isMobile ? -52 : -38, duration: 1, ease: "none" })
-  .to(
-    "#maskRectLeft",
-    {
-      attr: { y: 0 },
-      duration: 1.5,
-      ease: "none",
-    },
-    "<"
-  )
-  .to(
-    ".about-name_desc:nth-child(2)",
-    { autoAlpha: 0, duration: 0.5, delay: 0.5 },
-    "<"
-  )
-  .to(
-    ".about-name_desc:nth-child(3)",
-    { color: "var(--color--text)", duration: 0.5, ease: "none" },
-    "<"
-  )
-  .to("#maskRectRight", {
-    attr: { y: 0 },
-    duration: 1.5,
-    ease: "none",
-  })
-  .to(".about-name_right", { yPercent: isMobile ? -79 : -68, duration: 1, ease: "none" }, "<")
+  .to(".about-name_right", { yPercent: -38, duration: 1, ease: "none" })
+  .to("#maskRectLeft", { attr: { y: 0 }, duration: 1.5, ease: "none" }, "<")
+  .to(".about-name_desc:nth-child(2)", { autoAlpha: 0, duration: 0.5, delay: 0.5 }, "<")
+  .to(".about-name_desc:nth-child(3)", { color: "var(--color--text)", duration: 0.5, ease: "none" }, "<")
+  .to("#maskRectRight", {attr: { y: 0 }, duration: 1.5, ease: "none"})
+  .to(".about-name_right", { yPercent: -68, duration: 1, ease: "none" }, "<")
   .to(".mask_one", { top: "0%", ease: "none", duration: 1, delay: 0.5 }, "<")
-  .to(
-    ".about-name_desc:nth-child(3)",
-    { autoAlpha: 0, duration: 0.5, delay: 0.5 },
-    "<"
-  )
-  .to(
-    ".about-name_desc:nth-child(4)",
-    { color: "var(--color--text)", duration: 0.5, ease: "none" },
-    "<"
-  );
+  .to(".about-name_desc:nth-child(3)", { autoAlpha: 0, duration: 0.5, delay: 0.5 }, "<")
+  .to(".about-name_desc:nth-child(4)", { color: "var(--color--text)", duration: 0.5, ease: "none" }, "<");
+});
+mm.add("(max-width: 768px)", () => {
+    const nameTl = gsap.timeline({
+  scrollTrigger: {
+    trigger: ".section_about-name",
+    start: "top top",
+    end: "+=100%",
+    scrub: 0.5,
+    pin: true,
+    markers: false,
+  },
+});
+nameTl
+  .to(".about-name_right", { yPercent: 9, duration: 1, ease: "none" })
+  .to(".name_text-one", { autoAlpha: 1, duration: 1, delay: 0.5, ease: "none" }, "<")
+  .to(".about-name_desc:nth-child(1)", { color: "var(--color--text)", duration: 0.5, ease: "none" }, "<")
+  .to("#maskRectLeft", {attr: { y: -300 }, duration: 1.5, ease: "none" })
+  .to("#maskRectRight", { attr: { y: -300 }, duration: 1.5, ease: "none", }, "<")
+  .to(".mask_one", { top: "50%", ease: "none", duration: 1.1 }, "<")
+  .to(".about-name_right", { yPercent: -21 , duration: 1, ease: "none" }, "<")
+  .to(".about-name_desc:nth-child(1)", { autoAlpha: 0, duration: 0.5, delay: 0.5 }, "<")
+  .to(".about-name_desc:nth-child(2)", { color: "var(--color--text)", duration: 0.5, ease: "none" }, "<")
+  .set("#maskRectLeft", { attr: { y: 300 } })
+  .set("#maskRectRight", { attr: { y: 300 } })
+  .to(".about-name_right", { yPercent: -52, duration: 1, ease: "none" })
+  .to("#maskRectLeft", { attr: { y: 0 }, duration: 1.5, ease: "none" }, "<")
+  .to(".about-name_desc:nth-child(2)", { autoAlpha: 0, duration: 0.5, delay: 0.5 }, "<")
+  .to(".about-name_desc:nth-child(3)", { color: "var(--color--text)", duration: 0.5, ease: "none" }, "<")
+  .to("#maskRectRight", {attr: { y: 0 }, duration: 1.5, ease: "none"})
+  .to(".about-name_right", { yPercent: -79 , duration: 1, ease: "none" }, "<")
+  .to(".mask_one", { top: "0%", ease: "none", duration: 1, delay: 0.5 }, "<")
+  .to(".about-name_desc:nth-child(3)", { autoAlpha: 0, duration: 0.5, delay: 0.5 }, "<")
+  .to(".about-name_desc:nth-child(4)", { color: "var(--color--text)", duration: 0.5, ease: "none" }, "<");
+});
+
 
 
 // ScrollTrigger.create({
@@ -211,7 +192,7 @@ nameTl
 //   end: "bottom+=100% bottom",
 //   pin: false,
 //   scrub: true,
-//   markers: false
+//   markers: true
 // });
 
 function debounce(func, delay) {
@@ -222,42 +203,76 @@ function debounce(func, delay) {
   };
 }
 
-// 2. Debounced ScrollTrigger.refresh()
 const debouncedRefresh = debounce(() => {
   ScrollTrigger.refresh();
 }, 200);
 
- document.querySelectorAll(".accordion-item").forEach((el) => {
-  const icon = el.querySelector(".accordion-item-icon-bottom");
+    mm.add("(min-width: 769px)", () => {
+         document.querySelectorAll(".accordion-item").forEach((el) => {
+            const icon = el.querySelector(".accordion-item-icon-bottom");
 
-  gsap.to(el, {
-    scrollTrigger: {
-      trigger: el,
-      start: "top-=300 top",
-      end: "+=150",
-      scrub: 0.5,
-      markers: false,
-      onUpdate: debouncedRefresh
-    },
-    height: "auto",
-    duration: 0.5,
-    ease: "power2.out"
-  });
+            gsap.to(el, {
+                scrollTrigger: {
+                trigger: el,
+                start: "top-=300 top",
+                end: "+=150",
+                scrub: 0.5,
+                markers: false,
+                onUpdate: debouncedRefresh
+                },
+                height: "auto",
+                duration: 0.5,
+                ease: "power2.out"
+            });
 
-  if (icon) {
-    gsap.to(icon, {
+            if (icon) {
+                gsap.to(icon, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top-=300 top",
+                    end: "+=150",
+                    scrub: 0.5,
+                    onUpdate: debouncedRefresh
+                },
+                top: "80%",
+                ease: "power2.out"
+                });
+            }
+            });
+    });
+
+mm.add("(max-width: 768px)", () => {
+  document.querySelectorAll(".accordion-item").forEach((el) => {
+    const icon = el.querySelector(".accordion-item-icon-bottom");
+
+    gsap.to(el, {
       scrollTrigger: {
         trigger: el,
-        start: "top-=300 top",
-        end: "+=150",
-        scrub: 0.5,
-        onUpdate: debouncedRefresh
+        start: "top 90%", 
+       toggleActions: "play none none reverse",
+        markers: false
       },
-      top: "80%",
+      height: "auto",
+      duration: 0.5,
       ease: "power2.out"
     });
-  }
+
+    if (icon) {
+      gsap.to(icon, {
+        scrollTrigger: {
+          trigger: el,
+          start: "top 90%",
+        toggleActions: "play none none reverse",
+          markers: false
+        },
+        top: "80%",
+        duration: 0.5,
+        ease: "power2.out"
+      });
+    }
+  });
 });
+
 
   
 
@@ -272,22 +287,22 @@ const debouncedRefresh = debounce(() => {
     type: "chars, words",
   });
 
-  let visionTimeline = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".section_about-vision",
-      start: "top top",
-      end: "bottom+=100% top",
-      scrub: 0.5,
-      markers: false,
-      pin: true,
-    },
-  });
 
-  visionTimeline
-    .from(visionTop.chars, {
-      y: -100,
-      rotation: -20,
-      autoAlpha: 0,
+//   mm.add("(min-width: 769px)", () => {
+     let visionTimeline = gsap.timeline({
+        scrollTrigger: {
+        trigger: ".section_about-vision",
+        start: "top-=100 top",
+        end: "bottom+=100% top",
+        scrub: false,
+        toggleActions: "play none none reverse",
+        markers: false,
+        pin: false,
+        },
+    });
+
+    visionTimeline
+    .from(visionTop.chars, {y: -100, rotation: -20, autoAlpha: 0,
       stagger: {
         each: 0.05,
       },
@@ -307,6 +322,45 @@ const debouncedRefresh = debounce(() => {
       },
       "<"
     );
+//   })
+//   mm.add("(max-width: 768px)", () => {
+//          let visionTimeline = gsap.timeline({
+//         scrollTrigger: {
+//         trigger: ".section_about-vision",
+//         start: "top top",
+//         end: "bottom+=100% top",
+//         toggleActions: "play none none reverse",
+//         },
+//     });
+
+//     visionTimeline
+//     .from(visionTop.chars, {y: -100, rotation: -20, autoAlpha: 0,
+//       stagger: {
+//         each: 0.05,
+//       },
+//       ease: "circ.out",
+//     })
+
+//     .from(
+//       visionBottom.chars,
+//       {
+//         y: 100,
+//         rotation: 20,
+//         autoAlpha: 0,
+//         stagger: {
+//           each: 0.05,
+//         },
+//         ease: "circ.out",
+//       },
+//       "<"
+//     );
+//   })
+
+
+
+
+  
+
 
 
     //text-reveal
@@ -345,4 +399,3 @@ const debouncedRefresh = debounce(() => {
 
 
 });
-
